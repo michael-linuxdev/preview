@@ -278,6 +278,9 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
 .footer-meta{display:grid;gap:.35rem}
 .footer-legal{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.5rem 1.25rem}
 @media (min-width:720px){.footer-legal{justify-content:flex-end}}
+/* Rechtliches: mind. 44 px Tippfläche */
+.footer-legal a{display:inline-flex;align-items:center;min-height:44px;padding-inline:.125rem}
+@media (min-width:720px) and (hover:hover){.footer-legal a{min-height:32px}}
 
 /* Mobile: Erstansicht füllt den Bildschirm */
 @media (max-width:767.98px){
@@ -419,14 +422,7 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
       <!-- Kontakt: sobald die Adresse existiert, ersetzen durch:
       <p><a href="mailto:ADRESSE">ADRESSE</a></p> -->
       <p><span class="contact-pending"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Kontakt in Kürze</span></p>
-      <!-- Rechtliches: Sobald die Seiten existieren, hier einfügen:
-      <nav aria-label="Rechtliches">
-        <ul class="footer-legal">
-          <li><a href="/impressum/">Impressum</a></li>
-          <li><a href="/datenschutz/">Datenschutz</a></li>
-        </ul>
-      </nav>
-      -->
+      <nav aria-label="Rechtliches"><ul class="footer-legal"><li><a href="/impressum.html">Impressum</a></li><li><a href="/datenschutz.html">Datenschutz</a></li></ul></nav>
       <p>© <span class="num">2026</span> Michael</p>
     </div>
   </div>
