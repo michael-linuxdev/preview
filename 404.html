@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Seite nicht gefunden – Michael Tranitz</title>
+<title>Seite nicht gefunden – Michael</title>
 <meta name="description" content="Die angeforderte Seite wurde nicht gefunden.">
 <meta name="robots" content="noindex, follow">
 <meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#f5f7fb" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0d1424" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f6f4ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111917" media="(prefers-color-scheme: dark)">
 <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
@@ -25,46 +25,46 @@
   unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
 }
 :root{
-  --bg:#f5f7fb;
-  --bg-soft:#eaf0fa;
-  --surface:#ffffff;
-  --text:#0f1b2d;
-  --muted:#4a5870;
-  --accent:#2d63c8;
-  --accent-hover:#234fa3;
+  --bg:#f6f4ef;
+  --bg-soft:#edeae2;
+  --surface:#fffefb;
+  --text:#1d2421;
+  --muted:#575e57;
+  --accent:#1e6b64;
+  --accent-hover:#175650;
   --accent-text:#ffffff;
-  --accent-soft:#e3ecfb;
-  --accent-ink:#2552a8;
-  --border:#dfe6f1;
-  --focus:#1d4ed8;
-  --shadow-sm:0 1px 2px rgba(15,27,45,.05);
-  --shadow:0 1px 2px rgba(15,27,45,.04),0 8px 24px -8px rgba(15,27,45,.10);
-  --shadow-hover:0 2px 4px rgba(15,27,45,.05),0 14px 30px -10px rgba(15,27,45,.14);
-  --shadow-lg:0 2px 4px rgba(15,27,45,.04),0 18px 40px -12px rgba(15,27,45,.16);
-  --disabled-bg:#eceff4;
-  --disabled-text:#556274;
-  --disabled-border:#c3ccd9;
+  --accent-soft:#dceae6;
+  --accent-ink:#1a5f59;
+  --border:#e0dcd1;
+  --focus:#1a5f59;
+  --disabled-bg:#ebe8e1;
+  --disabled-text:#575e57;
+  --disabled-border:#cdc8bb;
+  --shadow-sm:0 1px 2px rgba(29,36,33,.05);
+  --shadow:0 1px 2px rgba(29,36,33,.04),0 8px 24px -8px rgba(29,36,33,.10);
+  --shadow-hover:0 2px 4px rgba(29,36,33,.05),0 14px 30px -10px rgba(29,36,33,.14);
+  --shadow-lg:0 2px 4px rgba(29,36,33,.04),0 18px 40px -12px rgba(29,36,33,.16);
   --radius:24px;
   --radius-lg:28px;
   --radius-sm:14px;
 }
 @media (prefers-color-scheme: dark){
   :root{
-    --bg:#0d1424;
-    --bg-soft:#121b2f;
-    --surface:#1e2b4b;
-    --text:#e8eef8;
-    --muted:#a8b5ca;
-    --accent:#8db4f5;
-    --accent-hover:#a9c7f8;
-    --accent-text:#0b1322;
-    --accent-soft:#243560;
-    --accent-ink:#a9c7f8;
-    --border:#34456c;
-    --focus:#a9c7f8;
-    --disabled-bg:#151f33;
-    --disabled-text:#9aa6b8;
-    --disabled-border:#3a4767;
+    --bg:#111917;
+    --bg-soft:#15201d;
+    --surface:#1d2b27;
+    --text:#e9efec;
+    --muted:#a9b8b2;
+    --accent:#6cc2b5;
+    --accent-hover:#8ad2c7;
+    --accent-text:#0c1513;
+    --accent-soft:#20403a;
+    --accent-ink:#86d0c4;
+    --border:#2c403a;
+    --focus:#8ad2c7;
+    --disabled-bg:#141e1b;
+    --disabled-text:#9eada7;
+    --disabled-border:#344a44;
     --shadow-sm:0 1px 2px rgba(0,0,0,.25);
     --shadow:0 1px 2px rgba(0,0,0,.22),0 8px 24px -10px rgba(0,0,0,.4);
     --shadow-hover:0 2px 4px rgba(0,0,0,.24),0 14px 30px -12px rgba(0,0,0,.5);
@@ -129,7 +129,8 @@ section{padding-block:clamp(4rem,9vw,7rem)}
   padding:.45rem 1rem .45rem .75rem;border-radius:999px;font-size:.9375rem;font-weight:500;color:var(--muted);
   margin-bottom:1.75rem;
 }
-.hero .role .dot{width:.55rem;height:.55rem;border-radius:50%;background:var(--accent)}
+@media (max-width:420px){.hero .role{font-size:.8125rem;padding:.4rem .85rem .4rem .65rem;gap:.5rem}}
+.hero .role .dot{flex:none;width:.55rem;height:.55rem;border-radius:50%;background:var(--accent)}
 .hero h1{font-size:clamp(2.5rem,6.2vw,4.25rem);letter-spacing:-.03em;line-height:1.05}
 .hero h1 .accent{color:var(--accent-ink);display:block;font-weight:600;font-size:.52em;letter-spacing:-.02em;margin-top:.75rem}
 .hero .lead{font-size:clamp(1.125rem,1.8vw,1.3125rem);color:var(--muted);margin-top:1.75rem;max-width:min(40rem,65ch)}
@@ -150,14 +151,13 @@ section{padding-block:clamp(4rem,9vw,7rem)}
 .contact-pending svg{width:1em;height:1em;flex:none}
 
 
-/* Leistungen */
-#leistungen{background:var(--bg-soft)}
+/* Leistungen – Karten */
 section.group{padding:0}
 .groups{display:grid;gap:clamp(2.5rem,5vw,3rem);grid-template-columns:minmax(0,1fr)}
 @media (min-width:1000px){.groups{grid-template-columns:repeat(3,minmax(0,1fr));gap:1.5rem}}
 .group-head{margin-bottom:1.25rem;padding-inline:.25rem}
-.group-head h3{font-size:1.25rem;font-weight:700;display:flex;align-items:center;gap:.65rem}
-.group-head h3::before{content:"";width:.6rem;height:.6rem;border-radius:999px;background:var(--accent);flex:none}
+.group-head h4{font-size:1.25rem;font-weight:700;display:flex;align-items:center;gap:.65rem}
+.group-head h4::before{content:"";width:.6rem;height:.6rem;border-radius:999px;background:var(--accent);flex:none}
 .group-head p{color:var(--muted);font-size:.975rem;margin-top:.4rem}
 .cards{list-style:none;margin:0;padding:0;display:grid;gap:1rem;grid-template-columns:minmax(0,1fr)}
 @media (min-width:640px) and (max-width:999.98px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -173,8 +173,47 @@ section.group{padding:0}
   background:var(--accent-soft);color:var(--accent-ink);
 }
 .icon svg{width:1.4rem;height:1.4rem}
-.card h4{font-size:1.0625rem;font-weight:600;line-height:1.3;letter-spacing:-.01em;margin:0;hyphens:auto;overflow-wrap:break-word}
+.card h5{font-size:1.0625rem;font-weight:600;line-height:1.3;letter-spacing:-.01em;margin:0;hyphens:auto;overflow-wrap:break-word}
 .card p{color:var(--muted);font-size:.975rem;line-height:1.6}
+
+/* Leistungen im Detail (Disclosure) */
+.more{margin-top:clamp(2rem,4vw,2.5rem)}
+.more>summary{
+  list-style:none;display:flex;align-items:center;justify-content:center;gap:.6rem;width:fit-content;margin-inline:auto;
+  min-height:3rem;padding:.75rem 1.4rem;border-radius:999px;cursor:pointer;user-select:none;
+  background:var(--surface);color:var(--accent-ink);font-weight:600;
+  border:1px solid color-mix(in srgb,var(--accent) 75%,var(--border));box-shadow:var(--shadow-sm);
+  transition:background-color .2s ease,box-shadow .2s ease;
+}
+.more>summary::-webkit-details-marker{display:none}
+.more>summary::marker{content:""}
+.more>summary:hover{background:var(--accent-soft);box-shadow:var(--shadow)}
+.more>summary:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.more .chev{width:1.15rem;height:1.15rem;flex:none;transition:transform .25s ease}
+.more[open] .chev{transform:rotate(180deg)}
+.more .lbl-close,.more[open] .lbl-open{display:none}
+.more[open] .lbl-close{display:inline}
+.more-body{padding-top:clamp(2.5rem,5vw,3.5rem)}
+.more-head h3{font-size:clamp(1.5rem,2.8vw,2rem)}
+@media (prefers-reduced-motion:reduce){.more .chev,.more>summary{transition:none}}
+
+/* IT-Beratung */
+#it-beratung{background:var(--bg-soft)}
+.offer{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow);
+  padding:clamp(2rem,5vw,3.5rem);display:grid;gap:clamp(2rem,4vw,3rem);grid-template-columns:minmax(0,1fr);
+}
+@media (min-width:900px){.offer{grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);align-items:start}}
+.offer-main h2{font-size:clamp(1.75rem,3.2vw,2.375rem)}
+.offer-main p{color:var(--muted);margin-top:1rem;font-size:1.125rem;max-width:60ch}
+.offer-main p.offer-note{font-size:1rem;margin-top:1.5rem;color:var(--text);font-weight:500}
+.offer-focus{border-top:1px solid var(--border);padding-top:2rem}
+@media (min-width:900px){.offer-focus{border-top:0;padding-top:.35rem;border-left:1px solid var(--border);padding-left:clamp(2rem,4vw,3rem)}}
+.offer-focus h3{font-size:.8125rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
+.focus-list{list-style:none;margin:0;padding:0}
+.focus-list li{display:flex;align-items:center;gap:.75rem;padding:.8rem 0;border-bottom:1px solid var(--border);font-weight:500}
+.focus-list li:last-child{border-bottom:0}
+.focus-list li::before{content:"";width:.5rem;height:.5rem;border-radius:999px;background:var(--accent);flex:none}
 
 /* Ansatz – Zeitstrahl */
 .steps{
@@ -238,10 +277,11 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{transition:none!important;animation:none!important}
-  .card:hover,.btn-primary:hover{transform:none}
+  .btn-primary:hover{transform:none}
 }
 @media (forced-colors: active){
-  .btn,.card,.cta-box{border:1px solid CanvasText}
+  .btn,.offer,.cta-box{border:1px solid CanvasText}
+  .focus-list li::before{background:CanvasText}
   .step::before{border:2px solid CanvasText}
   .step:not(:last-child)::after{background:CanvasText}
 }
@@ -250,18 +290,28 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
   :root{--bg:#fff;--bg-soft:#fff;--surface:#fff;--text:#000;--muted:#222;--accent:#000;--accent-text:#fff;--accent-ink:#000;--accent-soft:#fff;--border:#999}
   html,body{background:#fff!important;color:#000!important;font-size:11pt;line-height:1.5}
   *,*::before,*::after{box-shadow:none!important;text-shadow:none!important;transition:none!important}
-  .skip-link,.hero-art,.hero::before,.cta-box::after,.icon,.btn svg,.principles svg,.btn-secondary{display:none!important}
+  .skip-link,.hero-art,.hero::before,.cta-box::after,.icon,.btn svg,.principles svg,.btn-secondary,a.btn[href^="#"]{display:none!important}
   section{padding-block:10mm 0}
   .hero{padding-top:0}
   .hero h1 .accent{color:#000}
   .container{max-width:none;padding-inline:0}
-  .groups{grid-template-columns:minmax(0,1fr);gap:6mm}
-  .cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:4mm}
-  .card,.cta-box{border:1px solid #999;border-radius:8px;padding:4mm 5mm}
-  .card,.step,.cta-box,.group-head,.principles li{break-inside:avoid;page-break-inside:avoid}
+  .offer{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:8mm}
+  .offer,.cta-box{border:1px solid #999;border-radius:8px;padding:5mm 6mm}
+  .offer-focus{border-left:1px solid #999;border-top:0;padding:0 0 0 6mm}
+  .focus-list li{padding:1.5mm 0;border-color:#ccc}
+  .focus-list li::before{background:#000}
+  .offer,.step,.cta-box,.principles li{break-inside:avoid;page-break-inside:avoid}
   h2,h3,h4,.section-head{break-after:avoid;page-break-after:avoid}
   .section-head,.steps{break-inside:avoid;page-break-inside:avoid}
-  #ansatz{break-before:page}
+  .more>summary{display:none!important}
+  .more::details-content{content-visibility:visible!important;display:block!important}
+  .more>.more-body{display:block!important;padding-top:8mm}
+  .groups{grid-template-columns:minmax(0,1fr);gap:6mm}
+  .cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:4mm}
+  .card{border:1px solid #999;border-radius:8px;padding:4mm 5mm;background:#fff}
+  .card,.group-head{break-inside:avoid;page-break-inside:avoid}
+  .group-head h4::before{background:#000}
+  h5{break-after:avoid;page-break-after:avoid}
   .steps{grid-template-columns:repeat(2,minmax(0,1fr));gap:6mm}
   .step{display:block;padding:0}
   .step::before{background:#fff;color:#000;border:1.5px solid #000;width:2.25rem;height:2.25rem;margin-bottom:2mm}
@@ -289,7 +339,7 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
       <div class="hero-inner">
         <p class="code" aria-hidden="true">404</p>
         <h1 id="fehler-titel">Diese Seite wurde nicht gefunden</h1>
-        <p class="lead">Die aufgerufene Adresse existiert nicht oder wurde verschoben. Auf der Startseite finden Sie alle Informationen zu meinen Leistungen.</p>
+        <p class="lead">Die aufgerufene Adresse existiert nicht oder wurde verschoben. Auf der Startseite finden Sie alle Informationen zu meiner IT-Beratung.</p>
         <div class="actions">
           <a class="btn btn-primary" href="/">Zur Startseite</a>
           <!-- Kontakt: sobald die Adresse existiert, ersetzen durch:
@@ -304,7 +354,7 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
 <footer>
   <div class="container footer-inner">
     <div>
-      <p class="footer-name">Michael Tranitz</p>
+      <p class="footer-name">Michael</p>
       <p>IT-Berater</p>
     </div>
     <div class="footer-meta">
@@ -319,7 +369,7 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
         </ul>
       </nav>
       -->
-      <p>© <span class="num">2026</span> Michael Tranitz</p>
+      <p>© <span class="num">2026</span> Michael</p>
     </div>
   </div>
 </footer>
