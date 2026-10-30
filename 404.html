@@ -82,6 +82,7 @@ body{
 h1,h2,h3,h4{line-height:1.2;margin:0;letter-spacing:-.02em;font-weight:700}
 h2{letter-spacing:-.025em;line-height:1.15;text-wrap:balance}
 p{text-wrap:pretty}
+.hero h1 .accent,.hero .lead{text-wrap:balance}
 p{margin:0}
 a{color:var(--accent-ink);text-underline-offset:3px}
 a:hover{text-decoration-thickness:2px}
@@ -130,6 +131,7 @@ section{padding-block:clamp(4rem,9vw,7rem)}
   margin-bottom:1.75rem;
 }
 @media (max-width:420px){.hero .role{font-size:.8125rem;padding:.4rem .85rem .4rem .65rem;gap:.5rem}}
+@media (max-width:380px){.hero .role{font-size:.75rem;letter-spacing:0}}
 .hero .role .dot{flex:none;width:.55rem;height:.55rem;border-radius:50%;background:var(--accent)}
 .hero h1{font-size:clamp(2.5rem,6.2vw,4.25rem);letter-spacing:-.03em;line-height:1.05}
 .hero h1 .accent{color:var(--accent-ink);display:block;font-weight:600;font-size:.52em;letter-spacing:-.02em;margin-top:.75rem}
