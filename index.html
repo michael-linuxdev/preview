@@ -228,9 +228,16 @@ main,footer{position:relative;z-index:1}
 .btn-secondary{background:var(--surface);color:var(--text);border:1px solid var(--border);box-shadow:var(--shadow-sm)}
 .btn-secondary:hover{border-color:var(--accent)}
 .btn svg{width:1.15em;height:1.15em;flex:none}
+.sprite{position:absolute;width:0;height:0;overflow:hidden}
+.i{display:block;width:1.25rem;height:1.25rem;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.btn .i,.contact-pending .i{width:1.15em;height:1.15em}
+/* weiche runde Kacheln für Piktogramme */
+.tile{display:inline-grid;place-items:center;flex:none;background:var(--accent-soft);color:var(--accent-ink);border-radius:var(--radius-sm)}
+.tile-lg{width:3.25rem;height:3.25rem;border-radius:16px}.tile-lg .i{width:1.6rem;height:1.6rem}
+.tile-sm{width:2rem;height:2rem;border-radius:10px}.tile-sm .i{width:1.1rem;height:1.1rem}
 .btn-disabled{background:var(--disabled-bg);color:var(--disabled-text);border:1px dashed var(--disabled-border);box-shadow:none;cursor:default;user-select:none}
 .contact-pending{display:inline-flex;align-items:center;gap:.45rem;color:var(--disabled-text);cursor:default}
-.contact-pending svg{width:1em;height:1em;flex:none}
+
 
 
 
@@ -255,7 +262,7 @@ section.group{padding:0}
   width:2.75rem;height:2.75rem;border-radius:var(--radius-sm);display:grid;place-items:center;flex:none;
   background:var(--accent-soft);color:var(--accent-ink);
 }
-.icon svg{width:1.4rem;height:1.4rem}
+.icon .i{width:1.4rem;height:1.4rem}
 .card h5{font-size:1.0625rem;font-weight:600;line-height:1.3;letter-spacing:-.01em;margin:0;hyphens:auto;overflow-wrap:break-word}
 .card p{color:var(--muted);font-size:.975rem;line-height:1.6}
 
@@ -288,49 +295,82 @@ section.group{padding:0}
   padding:clamp(2rem,5vw,3.5rem);display:grid;gap:clamp(2rem,4vw,3rem);grid-template-columns:minmax(0,1fr);
 }
 @media (min-width:900px){.offer{grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);align-items:start}}
+.offer-head{display:flex;align-items:center;gap:1rem;margin-bottom:1.25rem}
+.offer-head .eyebrow{margin:0}
 .offer-main h2{font-size:clamp(1.75rem,3.2vw,2.375rem)}
 .offer-main p{color:var(--muted);margin-top:1rem;font-size:1.125rem;max-width:60ch}
-.offer-main p.offer-note{font-size:1rem;margin-top:1.5rem;color:var(--text);font-weight:500}
+.offer-main p.offer-note{font-size:1rem;margin-top:1.5rem;color:var(--text);font-weight:500;display:flex;gap:.65rem;align-items:flex-start}
+.offer-note .i{color:var(--accent-ink);width:1.25rem;height:1.25rem;margin-top:.15rem}
 .offer-focus{border-top:1px solid var(--border);padding-top:2rem}
 @media (min-width:900px){.offer-focus{border-top:0;padding-top:.35rem;border-left:1px solid var(--border);padding-left:clamp(2rem,4vw,3rem)}}
 .offer-focus h3{font-size:.8125rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
 .focus-list{list-style:none;margin:0;padding:0}
-.focus-list li{display:flex;align-items:center;gap:.75rem;padding:.8rem 0;border-bottom:1px solid var(--border);font-weight:500}
+.focus-list li{display:flex;align-items:center;gap:.85rem;padding:.7rem 0;border-bottom:1px solid var(--border);font-weight:500}
 .focus-list li:last-child{border-bottom:0}
-.focus-list li::before{content:"";width:.5rem;height:.5rem;border-radius:999px;background:var(--accent);flex:none}
 
-/* Ansatz – Zeitstrahl */
-.steps{
-  --marker:3rem;--line:color-mix(in srgb,var(--accent) 45%,var(--border));
-  list-style:none;margin:0;padding:0;counter-reset:step;display:grid;gap:0;grid-template-columns:minmax(0,1fr);
+/* Ansatz – Weg vom Ist-Zustand zur Lösung */
+.journey{
+  --mark:3.5rem;--gap:1.25rem;--track:3px;
+  --t0:var(--border);--t1:color-mix(in srgb,var(--accent) 35%,var(--border));--t2:var(--accent);
+  list-style:none;margin:0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);position:relative
 }
-.step{counter-increment:step;position:relative;display:grid;grid-template-columns:var(--marker) minmax(0,1fr);column-gap:1.25rem;padding-bottom:2.25rem}
-.step:last-child{padding-bottom:0}
-.step::before{
-  content:counter(step,decimal-leading-zero);grid-row:1 / span 2;
-  display:grid;place-items:center;width:var(--marker);height:var(--marker);border-radius:999px;
-  background:var(--accent);color:var(--accent-text);font-weight:700;font-size:.9375rem;
-  font-variant-numeric:tabular-nums;box-shadow:0 0 0 6px var(--bg),var(--shadow-sm);position:relative;z-index:1;
+.stop{position:relative;display:grid;grid-template-columns:var(--mark) minmax(0,1fr);column-gap:1.25rem;padding-bottom:2rem}
+.stop:last-child{padding-bottom:0}
+.stop-mark{
+  position:relative;z-index:1;display:grid;place-items:center;width:var(--mark);height:var(--mark);border-radius:18px;
+  background:var(--surface);color:var(--accent-ink);border:1.5px solid color-mix(in srgb,var(--accent) 40%,var(--border));
+  box-shadow:0 0 0 6px var(--bg),var(--shadow-sm)
 }
-.step:not(:last-child)::after{
-  content:"";position:absolute;left:calc(var(--marker) / 2 - 1px);top:var(--marker);bottom:0;width:2px;
-  background:var(--line);border-radius:2px;
+.stop-mark .i{width:1.6rem;height:1.6rem}
+.stop-num{
+  position:absolute;top:-.5rem;right:-.5rem;min-width:1.5rem;height:1.5rem;padding:0 .3rem;border-radius:999px;display:grid;place-items:center;
+  background:var(--accent);color:var(--accent-text);font-size:.8125rem;font-weight:700;font-variant-numeric:tabular-nums;box-shadow:0 0 0 3px var(--bg)
 }
-.step h3{font-size:1.1875rem;margin:.65rem 0 .5rem}
-.step p{color:var(--muted);font-size:.975rem;max-width:34ch}
-@media (min-width:900px){
-  .steps{grid-template-columns:repeat(4,minmax(0,1fr));column-gap:2rem}
-  .step{display:block;padding-bottom:0;padding-right:.5rem}
-  .step::before{margin-bottom:1.5rem}
-  .step:not(:last-child)::after{left:calc(var(--marker) + 1rem);right:-1rem;top:calc(var(--marker) / 2 - 1px);bottom:auto;width:auto;height:2px}
-  .step h3{margin-top:0}
+.stop-start .stop-mark{background:var(--bg-soft);color:var(--muted);border:1.5px dashed var(--disabled-border);border-radius:999px}
+.stop-goal .stop-mark{background:var(--accent);color:var(--accent-text);border-color:var(--accent);border-radius:999px;box-shadow:0 0 0 6px var(--bg),0 10px 24px -10px color-mix(in srgb,var(--accent) 70%,transparent)}
+.stop-kicker{font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink);margin:.35rem 0 .2rem}
+.stop-start .stop-kicker{color:var(--muted)}
+.stop h3{font-size:1.1875rem;margin:0 0 .35rem}
+.stop p:not(.stop-kicker){color:var(--muted);font-size:.975rem;max-width:34ch;margin:0}
+.stop-start .stop-body p:not(.stop-kicker),.stop-goal .stop-body p:not(.stop-kicker){font-weight:500}
+.stop-goal h3{color:var(--accent-ink)}
+/* Verbindungsstück zur nächsten Station; Farbe wird vom Ist (grau, gestrichelt) zum Ziel (Petrol) kräftiger */
+.stop:not(:last-child)::after{
+  content:"";position:absolute;left:calc(var(--mark) / 2 - var(--track) / 2);top:calc(var(--mark) + .5rem);bottom:.5rem;width:var(--track);border-radius:3px;
+  background:var(--seg,var(--t1));transform-origin:top center
 }
+.stop-start::after{--seg:repeating-linear-gradient(to bottom,var(--disabled-border) 0 6px,transparent 6px 11px)}
+.stop-step:nth-child(2)::after{--seg:linear-gradient(to bottom,var(--t1),color-mix(in srgb,var(--accent) 55%,var(--border)))}
+.stop-step:nth-child(3)::after{--seg:linear-gradient(to bottom,color-mix(in srgb,var(--accent) 55%,var(--border)),color-mix(in srgb,var(--accent) 75%,var(--border)))}
+.stop-step:nth-child(4)::after{--seg:linear-gradient(to bottom,color-mix(in srgb,var(--accent) 75%,var(--border)),color-mix(in srgb,var(--accent) 90%,var(--border)))}
+.stop-step:nth-child(5)::after{--seg:linear-gradient(to bottom,color-mix(in srgb,var(--accent) 90%,var(--border)),var(--t2))}
+@media (min-width:960px){
+  .journey{grid-template-columns:minmax(0,.8fr) repeat(4,minmax(0,1fr)) minmax(0,.8fr);column-gap:var(--gap)}
+  .stop{display:block;padding:0}
+  .stop-mark{margin-bottom:1.25rem}
+  .stop:not(:last-child)::after{
+    left:calc(var(--mark) + .5rem);right:calc(-1 * var(--gap) + .5rem);top:calc(var(--mark) / 2 - var(--track) / 2);bottom:auto;width:auto;height:var(--track);
+    transform-origin:left center
+  }
+  .stop-start::after{--seg:repeating-linear-gradient(to right,var(--disabled-border) 0 6px,transparent 6px 11px)}
+  .stop-step:nth-child(2)::after{--seg:linear-gradient(to right,var(--t1),color-mix(in srgb,var(--accent) 55%,var(--border)))}
+  .stop-step:nth-child(3)::after{--seg:linear-gradient(to right,color-mix(in srgb,var(--accent) 55%,var(--border)),color-mix(in srgb,var(--accent) 75%,var(--border)))}
+  .stop-step:nth-child(4)::after{--seg:linear-gradient(to right,color-mix(in srgb,var(--accent) 75%,var(--border)),color-mix(in srgb,var(--accent) 90%,var(--border)))}
+  .stop-step:nth-child(5)::after{--seg:linear-gradient(to right,color-mix(in srgb,var(--accent) 90%,var(--border)),var(--t2))}
+  .stop p:not(.stop-kicker){max-width:none}
+}
+/* Einblendung: nur mit JS + Bewegung erlaubt; Stationen erscheinen nacheinander, der Pfad „wächst“ mit */
+.journey.anim .stop{opacity:0;transform:translateY(12px);transition:opacity .5s ease,transform .5s ease;transition-delay:calc(var(--i,0) * 120ms)}
+.journey.anim .stop:not(:last-child)::after{transform:scaleY(0);transition:transform .45s ease;transition-delay:calc(var(--i,0) * 120ms + 220ms)}
+@media (min-width:960px){.journey.anim .stop:not(:last-child)::after{transform:scaleX(0)}}
+.journey.anim.in .stop{opacity:1;transform:none}
+.journey.anim.in .stop:not(:last-child)::after{transform:none}
 .principles{list-style:none;padding:0;margin:clamp(2.5rem,5vw,3.5rem) 0 0;display:flex;flex-wrap:wrap;gap:.75rem}
 .principles li{
   display:inline-flex;align-items:center;gap:.55rem;padding:.55rem 1rem;border-radius:999px;
   background:var(--accent-soft);color:var(--text);font-size:.9375rem;font-weight:500;
 }
-.principles svg{width:1rem;height:1rem;color:var(--accent-ink);flex:none}
+.principles .i{width:1.1rem;height:1.1rem;color:var(--accent-ink);flex:none}
 
 /* CTA */
 .cta{padding-top:0}
@@ -344,6 +384,7 @@ section.group{padding:0}
   background:radial-gradient(closest-side,var(--accent-soft),transparent 72%);z-index:-1;
 }
 @media (min-width:880px){.cta-box{grid-template-columns:1.4fr auto}}
+.cta-tile{margin-bottom:1.25rem}
 .cta-box h2{font-size:clamp(1.75rem,3.2vw,2.375rem)}
 .cta-box p{color:var(--muted);margin-top:1rem;font-size:1.125rem;max-width:36rem}
 .cta-mail{margin-top:1.25rem;font-size:1rem;color:var(--muted)}
@@ -353,6 +394,7 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
 .num{font-variant-numeric:tabular-nums}
 .footer-inner{display:grid;gap:1.5rem;grid-template-columns:minmax(0,1fr)}
 @media (min-width:720px){.footer-inner{grid-template-columns:minmax(0,1fr) auto;align-items:start}.footer-meta{text-align:right}}
+.footer-brand{display:flex;align-items:center;gap:.85rem}
 .footer-name{color:var(--text);font-weight:600}
 .footer-meta{display:grid;gap:.35rem}
 .footer-legal{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.5rem 1.25rem}
@@ -397,7 +439,7 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
   .offer-focus{padding-top:1.5rem}
   .cta-box{padding:2rem 1.25rem;border-radius:20px}
   .card{padding:1.25rem 1.25rem 1.35rem;border-radius:18px}
-  .card p,.step p,.group-head p{font-size:1rem}
+  .card p,.stop p:not(.stop-kicker),.group-head p{font-size:1rem}
   .principles li{font-size:1rem}
   .more>summary{width:100%}
   .more-body{padding-top:2.5rem}
@@ -410,16 +452,17 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
 }
 @media (forced-colors: active){
   .btn,.offer,.cta-box{border:1px solid CanvasText}
-  .focus-list li::before{background:CanvasText}
-  .step::before{border:2px solid CanvasText}
-  .step:not(:last-child)::after{background:CanvasText}
+  .stop-mark,.tile{border:1px solid CanvasText}
+  .stop:not(:last-child)::after{background:CanvasText}
 }
 @media print{
   @page{margin:18mm 16mm}
   :root{--bg:#fff;--bg-soft:#fff;--surface:#fff;--text:#000;--muted:#222;--accent:#000;--accent-text:#fff;--accent-ink:#000;--accent-soft:#fff;--border:#999}
   html,body{background:#fff!important;color:#000!important;font-size:11pt;line-height:1.5}
   *,*::before,*::after{box-shadow:none!important;text-shadow:none!important;transition:none!important}
-  .skip-link,.hero-art,.pc,.cta-box::after,.icon,.btn svg,.principles svg,.btn-secondary,a.btn[href^="#"]{display:none!important}
+  .skip-link,.hero-art,.pc,.cta-box::after,.icon,.btn svg,.principles .i,.btn-secondary,a.btn[href^="#"],.tile-lg,.footer-brand .tile{display:none!important}
+  .tile{background:#fff;border:1px solid #999}
+  .journey .stop{opacity:1!important;transform:none!important}
   section{padding-block:10mm 0}
   .hero{padding-top:0;min-height:0;display:block}
   .hero h1{font-size:28pt}
@@ -430,10 +473,9 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
   .offer,.cta-box{border:1px solid #999;border-radius:8px;padding:5mm 6mm}
   .offer-focus{border-left:1px solid #999;border-top:0;padding:0 0 0 6mm}
   .focus-list li{padding:1.5mm 0;border-color:#ccc}
-  .focus-list li::before{background:#000}
-  .offer,.step,.cta-box,.principles li{break-inside:avoid;page-break-inside:avoid}
+  .offer,.stop,.cta-box,.principles li{break-inside:avoid;page-break-inside:avoid}
   h2,h3,h4,.section-head{break-after:avoid;page-break-after:avoid}
-  .section-head,.steps{break-inside:avoid;page-break-inside:avoid}
+  .section-head,.journey{break-inside:avoid;page-break-inside:avoid}
   .more>summary{display:none!important}
   .more::details-content{content-visibility:visible!important;display:block!important}
   .more>.more-body{display:block!important;padding-top:8mm}
@@ -443,10 +485,11 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
   .card,.group-head{break-inside:avoid;page-break-inside:avoid}
   .group-head h4::before{background:#000}
   h5{break-after:avoid;page-break-after:avoid}
-  .steps{grid-template-columns:repeat(2,minmax(0,1fr));gap:6mm}
-  .step{display:block;padding:0}
-  .step::before{background:#fff;color:#000;border:1.5px solid #000;width:2.25rem;height:2.25rem;margin-bottom:2mm}
-  .step:not(:last-child)::after{display:none}
+  .journey{grid-template-columns:repeat(3,minmax(0,1fr));gap:6mm}
+  .stop{display:block;padding:0}
+  .stop-mark{--mark:2.5rem;background:#fff!important;color:#000!important;border:1.5px solid #000!important;margin-bottom:2mm;box-shadow:none}
+  .stop-num{background:#000;color:#fff}
+  .stop:not(:last-child)::after{display:none}
   .principles li{background:#fff;border:1px solid #999}
   .btn-disabled{border:1px dashed #555!important;color:#333!important}
   .btn{border:1px solid #000;background:#fff!important;color:#000!important;min-height:0;padding:2mm 4mm}
@@ -458,6 +501,8 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
 </style>
 </head>
 <body>
+<!-- Piktogramme: eigenes Icon-Set (24er Raster, Linien 1,75 px, currentColor) -->
+<svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false"><defs><symbol id="i-kompass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></symbol><symbol id="i-code" viewBox="0 0 24 24"><path d="m8 8-4 4 4 4"/><path d="m16 8 4 4-4 4"/><path d="m13.5 5-3 14"/></symbol><symbol id="i-ablauf" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.5 6H14a4 4 0 0 1 4 4v5.5"/><path d="m15.5 13 2.5 2.5 2.5-2.5"/></symbol><symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></symbol><symbol id="i-schild" viewBox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.3 7.5 9.5 4.3-1.2 7.5-4.9 7.5-9.5V6z"/><path d="m9 12 2 2 4-4"/></symbol><symbol id="i-dokument" viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 13h6M10 17h4"/></symbol><symbol id="i-trend" viewBox="0 0 24 24"><path d="m3 17 6-6 4 4 8-8"/><path d="M15 7h6v6"/></symbol><symbol id="i-browser" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18"/><path d="M6.5 6.5h0M9 6.5h0"/></symbol><symbol id="i-raster" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></symbol><symbol id="i-wechsel" viewBox="0 0 24 24"><path d="M4.5 10a8 8 0 0 1 14-3.5L20 8"/><path d="M20 3.5V8h-4.5"/><path d="M19.5 14a8 8 0 0 1-14 3.5L4 16"/><path d="M4 20.5V16h4.5"/></symbol><symbol id="i-verbindung" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol><symbol id="i-auswertung" viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 18v-3M13 18v-5M16 18v-2"/></symbol><symbol id="i-ziel" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol><symbol id="i-warnung" viewBox="0 0 24 24"><path d="M10.3 4.2 2.6 18a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 4.2a2 2 0 0 0-3.4 0z"/><path d="M12 9.5v4"/><path d="M12 17h.01"/></symbol><symbol id="i-balken" viewBox="0 0 24 24"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></symbol><symbol id="i-karte" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18"/><path d="M7 15h4"/></symbol><symbol id="i-gebaeude" viewBox="0 0 24 24"><rect x="3" y="10" width="7" height="10" rx="1.5"/><rect x="14" y="4" width="7" height="16" rx="1.5"/><path d="M6.5 14h0M17.5 8h0M17.5 12h0M17.5 16h0"/></symbol><symbol id="i-lupe" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.4-4.4"/><path d="M8.5 11h5"/></symbol><symbol id="i-rangfolge" viewBox="0 0 24 24"><path d="M10 6h10M10 12h7M10 18h4"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></symbol><symbol id="i-werkzeug" viewBox="0 0 24 24"><path d="M14.5 5.5a4.2 4.2 0 0 0-5 5.3L4 16.3V20h3.7l5.5-5.5a4.2 4.2 0 0 0 5.3-5l-2.6 2.6-2.9-.4-.4-2.9z"/></symbol><symbol id="i-anker" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><path d="M12 7v14"/><path d="M8.5 11h7"/><path d="M5 13.5a7 7 0 0 0 14 0"/></symbol><symbol id="i-standort" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol><symbol id="i-flagge" viewBox="0 0 24 24"><path d="M5 21V4"/><path d="M5 4h11.5l-2.5 4 2.5 4H5"/></symbol><symbol id="i-sprechblase" viewBox="0 0 24 24"><path d="M20 15.5a2 2 0 0 1-2 2H9l-5 3.5V6.5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/><path d="M8 9h8M8 13h5"/></symbol><symbol id="i-blitz" viewBox="0 0 24 24"><path d="M13 3 5 13.5h6.5L10.5 21 19 10.5h-6.5z"/></symbol><symbol id="i-buch" viewBox="0 0 24 24"><path d="M5 19.5V5a2 2 0 0 1 2-2h12v15H7a2 2 0 0 0-2 2 1.5 1.5 0 0 0 1.5 1.5H19"/><path d="M9 7.5h6"/></symbol><symbol id="i-gluehbirne" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.7.6 1.1 1.4 1.1 2.2h5c0-.8.4-1.6 1.1-2.2A6 6 0 0 0 12 3z"/></symbol><symbol id="i-uhr" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol><symbol id="i-pfeil" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></symbol></defs></svg>
 <a class="skip-link" href="#inhalt">Zum Inhalt springen</a>
 
 <main id="inhalt" tabindex="-1">
@@ -469,7 +514,7 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
           <a class="btn btn-primary" href="#angebot">Zum Angebot</a>
           <!-- Kontakt: sobald die Adresse existiert, ersetzen durch:
           <a class="btn btn-primary" href="mailto:ADRESSE">[Mail-Icon] Kontakt aufnehmen</a> -->
-          <span class="btn btn-disabled"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Kontakt in Kürze</span>
+          <span class="btn btn-disabled"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-uhr"/></svg>Kontakt in Kürze</span>
         </div>
       </div>
       <div class="hero-art" aria-hidden="true"><div class="pc-fallback"></div></div>
@@ -480,19 +525,19 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
     <div class="container">
       <article class="offer" id="it-beratung" aria-labelledby="beratung-titel">
         <div class="offer-main">
-          <p class="eyebrow">IT-Beratung</p>
+          <div class="offer-head"><span class="tile tile-lg" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-kompass"/></svg></span><p class="eyebrow">IT-Beratung</p></div>
           <h2 id="beratung-titel">Beratung, die Ihre IT als Ganzes betrachtet</h2>
           <p>Technik, Abläufe, Sicherheit und Kosten hängen zusammen. Deshalb betrachte ich Ihre IT nicht in Einzelteilen, sondern als Gesamtsystem – und entwickle mit Ihnen Lösungen, die zu Ihrer Organisation passen und im Alltag funktionieren.</p>
-          <p class="offer-note">Pragmatisch, herstellerneutral und mit klarem Blick auf Nutzen, Risiko und Aufwand.</p>
+          <p class="offer-note"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-ziel"/></svg><span>Pragmatisch, herstellerneutral und mit klarem Blick auf Nutzen, Risiko und Aufwand.</span></p>
         </div>
         <div class="offer-focus">
           <h3 id="schwerpunkte-titel">Typische Schwerpunkte</h3>
           <ul class="focus-list" aria-labelledby="schwerpunkte-titel">
-            <li>Prozesse und Automatisierung</li>
-            <li>Microsoft&nbsp;365 und Identitäten</li>
-            <li>IT-Steuerung und Sicherheit</li>
-            <li>Governance und Richtlinien</li>
-            <li>Wirtschaftlichkeit und Kostentransparenz</li>
+            <li><span class="tile tile-sm" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-ablauf"/></svg></span><span>Prozesse und Automatisierung</span></li>
+            <li><span class="tile tile-sm" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-person"/></svg></span><span>Microsoft&nbsp;365 und Identitäten</span></li>
+            <li><span class="tile tile-sm" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-schild"/></svg></span><span>IT-Steuerung und Sicherheit</span></li>
+            <li><span class="tile tile-sm" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-dokument"/></svg></span><span>Governance und Richtlinien</span></li>
+            <li><span class="tile tile-sm" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-trend"/></svg></span><span>Wirtschaftlichkeit und Kostentransparenz</span></li>
           </ul>
         </div>
       </article>
@@ -513,21 +558,21 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
               <ul class="cards">
                 <li class="card">
                   <div class="card-top">
-                    <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.3 7.5 9.5 4.3-1.2 7.5-4.9 7.5-9.5V6z"/><path d="m9 12 2 2 4-4"/></svg></div>
+                    <div class="icon" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-schild"/></svg></div>
                     <h5>Sicherheitsbetrieb</h5>
                   </div>
                   <p>Laufende Sicherheitsmaßnahmen organisieren: Überwachung, Härtung und regelmäßige Überprüfung Ihrer Systeme.</p>
                 </li>
                 <li class="card">
                   <div class="card-top">
-                    <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 4.2 2.6 18a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 4.2a2 2 0 0 0-3.4 0z"/><path d="M12 9.5v4"/><path d="M12 17h.01"/></svg></div>
+                    <div class="icon" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-warnung"/></svg></div>
                     <h5>Vorfallmanagement</h5>
                   </div>
                   <p>Klare Abläufe für den Ernstfall: vorbereitet reagieren, strukturiert aufarbeiten und daraus lernen.</p>
                 </li>
                 <li class="card">
                   <div class="card-top">
-                    <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg></div>
+                    <div class="icon" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-person"/></svg></div>
                     <h5>Microsoft 365 &amp; Identität</h5>
                   </div>
                   <p>Strukturierte Einführung und Optimierung von Microsoft&nbsp;365 mit sauberem Identitäts- und Berechtigungsmanagement.</p>
@@ -542,21 +587,21 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
               <ul class="cards">
                 <li class="card">
                   <div class="card-top">
-                    <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg></div>
+                    <div class="icon" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-balken"/></svg></div>
                     <h5>IT-Steuerung &amp; Reifegrad</h5>
                   </div>
                   <p>Den Ist-Zustand Ihrer IT bewerten, Ziele definieren und eine nachvollziehbare Roadmap für die Weiterentwicklung ableiten.</p>
                 </li>
                 <li class="card">
                   <div class="card-top">
-                    <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 13h6M10 17h4"/></svg></div>
+                    <div class="icon" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-dokument"/></svg></div>
                     <h5>Sicherheitsrichtlinien &amp; Governance</h5>
                   </div>
                   <p>Praxistaugliche Richtlinien, klare Verantwortlichkeiten und Regeln, die im Alltag tatsächlich gelebt werden.</p>
                 </li>
                 <li class="card">
                   <div class="card-top">
-                    <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.5 6H14a4 4 0 0 1 4 4v5.5"/><path d="m15.5 13 2.5 2.5 2.5-2.5"/></svg></div>
+                    <div class="icon" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-ablauf"/></svg></div>
                     <h5>Prozesse &amp; Automatisierung</h5>
                   </div>
                   <p>Wiederkehrende Abläufe analysieren, vereinfachen und automatisieren – damit Ihr Team Zeit für das Wesentliche gewinnt.</p>
@@ -571,14 +616,14 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
               <ul class="cards">
                 <li class="card">
                   <div class="card-top">
-                    <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18"/><path d="M7 15h4"/></svg></div>
+                    <div class="icon" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-karte"/></svg></div>
                     <h5>Abrechnung &amp; Wirtschaftlichkeit</h5>
                   </div>
                   <p>Transparenz über Lizenzen, Verträge und IT-Kosten – für fundierte Entscheidungen und nachvollziehbare Verrechnung.</p>
                 </li>
                 <li class="card">
                   <div class="card-top">
-                    <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="7" height="10" rx="1.5"/><rect x="14" y="4" width="7" height="16" rx="1.5"/><path d="M6.5 14h0M17.5 8h0M17.5 12h0M17.5 16h0"/></svg></div>
+                    <div class="icon" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-gebaeude"/></svg></div>
                     <h5>Beratung für KMU &amp; Gruppen</h5>
                   </div>
                   <p>Lösungen, die zur Größe und Struktur Ihrer Organisation passen – vom einzelnen Unternehmen bis zur Unternehmensgruppe.</p>
@@ -590,19 +635,19 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
       </details>
       <article class="offer offer-dev" id="entwicklung" aria-labelledby="entwicklung-titel">
         <div class="offer-main">
-          <p class="eyebrow">Individuelle Entwicklung</p>
+          <div class="offer-head"><span class="tile tile-lg" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-code"/></svg></span><p class="eyebrow">Individuelle Entwicklung</p></div>
           <h2 id="entwicklung-titel">Software, die zu Ihren Abläufen passt</h2>
           <p>Websites und Fachanwendungen, die Ihre Prozesse abbilden, statt sie zu verbiegen – individuell entwickelt oder effizient auf Basis bewährter Vorlagen. So entsteht Software, die Ihre Unternehmensziele unterstützt und im Alltag gern genutzt wird.</p>
-          <p class="offer-note">Individuell, wo es Ihren Vorsprung ausmacht – auf bewährter Grundlage, wo das schneller und wirtschaftlicher ist.</p>
+          <p class="offer-note"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-ziel"/></svg><span>Individuell, wo es Ihren Vorsprung ausmacht – auf bewährter Grundlage, wo das schneller und wirtschaftlicher ist.</span></p>
         </div>
         <div class="offer-focus">
           <h3 id="vorhaben-titel">Typische Vorhaben</h3>
           <ul class="focus-list" aria-labelledby="vorhaben-titel">
-            <li>Websites mit klarer Struktur, barrierefrei und datensparsam</li>
-            <li>Fachanwendungen für Ihre Kernprozesse</li>
-            <li>Ablösung gewachsener Insellösungen</li>
-            <li>Anbindung an Microsoft&nbsp;365 und bestehende Systeme</li>
-            <li>Dokumente und Auswertungen direkt aus Ihren Daten</li>
+            <li><span class="tile tile-sm" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-browser"/></svg></span><span>Websites mit klarer Struktur, barrierefrei und datensparsam</span></li>
+            <li><span class="tile tile-sm" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-raster"/></svg></span><span>Fachanwendungen für Ihre Kernprozesse</span></li>
+            <li><span class="tile tile-sm" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-wechsel"/></svg></span><span>Ablösung gewachsener Insellösungen</span></li>
+            <li><span class="tile tile-sm" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-verbindung"/></svg></span><span>Anbindung an Microsoft&nbsp;365 und bestehende Systeme</span></li>
+            <li><span class="tile tile-sm" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-auswertung"/></svg></span><span>Dokumente und Auswertungen direkt aus Ihren Daten</span></li>
           </ul>
         </div>
       </article>
@@ -616,29 +661,19 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
         <h2 id="ansatz-titel">Strukturiert vom Ist-Zustand zur tragfähigen Lösung</h2>
         <p>Jedes Vorhaben folgt einem klaren Ablauf – transparent, schrittweise und mit Blick auf nachhaltige Ergebnisse.</p>
       </div>
-      <ol class="steps">
-        <li class="step">
-          <h3>Verstehen</h3>
-          <p>Ziele, Rahmenbedingungen und den aktuellen Stand Ihrer IT gemeinsam erfassen.</p>
-        </li>
-        <li class="step">
-          <h3>Priorisieren</h3>
-          <p>Handlungsfelder nach Nutzen, Risiko und Aufwand bewerten und einen realistischen Fahrplan festlegen.</p>
-        </li>
-        <li class="step">
-          <h3>Umsetzen</h3>
-          <p>Maßnahmen pragmatisch realisieren – eng abgestimmt mit Ihrem Team und bestehenden Dienstleistern.</p>
-        </li>
-        <li class="step">
-          <h3>Verankern</h3>
-          <p>Ergebnisse dokumentieren, Wissen übergeben und Abläufe so etablieren, dass sie dauerhaft tragen.</p>
-        </li>
+      <ol class="journey" aria-label="Ablauf in vier Schritten vom Ist-Zustand zur tragfähigen Lösung">
+        <li class="stop stop-start"><span class="stop-mark" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-standort"/></svg></span><div class="stop-body"><p class="stop-kicker">Start</p><h3>Ist-Zustand</h3><p>Gewachsene IT, offene Fragen</p></div></li>
+        <li class="stop stop-step" style="--i:1"><span class="stop-mark" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-lupe"/></svg><span class="stop-num">1</span></span><div class="stop-body"><p class="stop-kicker">Schritt 1</p><h3>Verstehen</h3><p>Ziele, Rahmenbedingungen und den aktuellen Stand Ihrer IT gemeinsam erfassen.</p></div></li>
+        <li class="stop stop-step" style="--i:2"><span class="stop-mark" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-rangfolge"/></svg><span class="stop-num">2</span></span><div class="stop-body"><p class="stop-kicker">Schritt 2</p><h3>Priorisieren</h3><p>Handlungsfelder nach Nutzen, Risiko und Aufwand bewerten – mit realistischem Fahrplan.</p></div></li>
+        <li class="stop stop-step" style="--i:3"><span class="stop-mark" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-werkzeug"/></svg><span class="stop-num">3</span></span><div class="stop-body"><p class="stop-kicker">Schritt 3</p><h3>Umsetzen</h3><p>Maßnahmen pragmatisch realisieren – abgestimmt mit Ihrem Team und Ihren Dienstleistern.</p></div></li>
+        <li class="stop stop-step" style="--i:4"><span class="stop-mark" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-anker"/></svg><span class="stop-num">4</span></span><div class="stop-body"><p class="stop-kicker">Schritt 4</p><h3>Verankern</h3><p>Ergebnisse dokumentieren, Wissen übergeben und Abläufe dauerhaft etablieren.</p></div></li>
+        <li class="stop stop-goal" style="--i:5"><span class="stop-mark" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-flagge"/></svg></span><div class="stop-body"><p class="stop-kicker">Ziel</p><h3>Tragfähige Lösung</h3><p>Stabil, sicher und wirtschaftlich</p></div></li>
       </ol>
       <ul class="principles" aria-label="Grundsätze der Zusammenarbeit">
-        <li><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>Klare Kommunikation</li>
-        <li><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>Pragmatische Lösungen</li>
-        <li><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>Nachvollziehbare Dokumentation</li>
-        <li><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>Wissenstransfer statt Abhängigkeit</li>
+        <li><svg class="i" aria-hidden="true" focusable="false"><use href="#i-sprechblase"/></svg>Klare Kommunikation</li>
+        <li><svg class="i" aria-hidden="true" focusable="false"><use href="#i-blitz"/></svg>Pragmatische Lösungen</li>
+        <li><svg class="i" aria-hidden="true" focusable="false"><use href="#i-buch"/></svg>Nachvollziehbare Dokumentation</li>
+        <li><svg class="i" aria-hidden="true" focusable="false"><use href="#i-gluehbirne"/></svg>Wissenstransfer statt Abhängigkeit</li>
       </ul>
     </div>
   </section>
@@ -647,13 +682,14 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
     <div class="container">
       <div class="cta-box">
         <div>
+          <span class="tile tile-lg cta-tile" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-sprechblase"/></svg></span>
           <h2 id="kontakt-titel">Lassen Sie uns über Ihre IT sprechen</h2>
           <p>Sie haben ein konkretes Vorhaben oder möchten zunächst eine Einschätzung? Kontaktmöglichkeiten werden in Kürze hier ergänzt.</p>
         </div>
         <div>
           <!-- Kontakt: sobald die Adresse existiert, ersetzen durch:
           <a class="btn btn-primary" href="mailto:ADRESSE">[Mail-Icon] Kontakt aufnehmen</a> -->
-          <span class="btn btn-disabled"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Kontaktmöglichkeit in Arbeit</span>
+          <span class="btn btn-disabled"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-uhr"/></svg>Kontaktmöglichkeit in Arbeit</span>
         </div>
       </div>
     </div>
@@ -662,14 +698,15 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
 
 <footer>
   <div class="container footer-inner">
-    <div>
-      <p class="footer-name">Michael</p>
-      <p>IT-Berater</p>
+    <div class="footer-brand">
+      <span class="tile tile-sm" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-kompass"/></svg></span>
+      <div><p class="footer-name">Michael</p>
+      <p>IT-Berater</p></div>
     </div>
     <div class="footer-meta">
       <!-- Kontakt: sobald die Adresse existiert, ersetzen durch:
       <p><a href="mailto:ADRESSE">ADRESSE</a></p> -->
-      <p><span class="contact-pending"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Kontakt in Kürze</span></p>
+      <p><span class="contact-pending"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-uhr"/></svg>Kontakt in Kürze</span></p>
       <!-- Rechtliches: Sobald die Seiten existieren, hier einfügen:
       <nav aria-label="Rechtliches">
         <ul class="footer-legal">
@@ -682,5 +719,9 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
     </div>
   </div>
 </footer>
+<script>
+(function(){var j=document.querySelector('.journey');if(!j||!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+j.classList.add('anim');var o=new IntersectionObserver(function(e){if(e[0].isIntersecting){j.classList.add('in');o.disconnect();}},{rootMargin:'0px 0px -15% 0px'});o.observe(j);})();
+</script>
 </body>
 </html>
