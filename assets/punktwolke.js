@@ -9,7 +9,7 @@
     try { gl = canvas.getContext('webgl', { alpha: true, antialias: false, depth: false, stencil: false, premultipliedAlpha: true, powerPreference: 'low-power' }); } catch (e) { gl = null; }
     if (!gl) { post({ t: 'fail' }); return null; }
 
-    var st = { sy: 0, W: 1, H: 1, dpr: 1, sx: 0, sY: 0, sr: 0, heroH: 1, docMax: 1, px: 0, py: 0, hv: true, reduce: false, run: false };
+    var st = { amb: 0.17, sy: 0, W: 1, H: 1, dpr: 1, sx: 0, sY: 0, sr: 0, heroH: 1, docMax: 1, px: 0, py: 0, hv: true, reduce: false, run: false };
     var N = 0, A, S, U = {}, ready = false;
 
     function rndGen(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
@@ -38,7 +38,7 @@
       }
     }
     var VS = 'attribute vec3 a0,a1,a2,a3;attribute vec2 aS;' +
-      'uniform float uM,uT,uR,uD,uPt;uniform vec2 uC,uV;uniform mat3 uRot;uniform vec3 uFront,uBack;' +
+      'uniform float uM,uT,uR,uD,uPt,uA;uniform vec2 uC,uV;uniform mat3 uRot;uniform vec3 uFront,uBack;' +
       'varying vec3 vCol;varying float vA;' +
       'vec3 pick(float n){return n<.5?a0:n<1.5?a1:n<2.5?a2:a3;}' +
       'void main(){float n=floor(uM),f=uM-n;f=clamp(f*1.45-aS.x*.45,0.,1.);f=f*f*(3.-2.*f);' +
@@ -48,7 +48,7 @@
       'p=uRot*p;float s=uD/(uD-p.z);vec2 px=uC+vec2(p.x,-p.y)*uR*s;' +
       'gl_Position=vec4(px.x/uV.x*2.-1.,1.-px.y/uV.y*2.,0.,1.);' +
       'float df=clamp((p.z+1.15)/2.3,0.,1.);gl_PointSize=uPt*s*(.7+.6*aS.y);' +
-      'vCol=mix(uBack,uFront,.25+.75*df);vA=.22+.78*df;}';
+      'vCol=mix(uBack,uFront,.25+.75*df);vA=(.22+.78*df)*uA;}';
     var FS = 'precision mediump float;varying vec3 vCol;varying float vA;' +
       'void main(){float r=length(gl_PointCoord-.5);float a=smoothstep(.5,.12,r)*vA;if(a<.004)discard;gl_FragColor=vec4(vCol*a,a);}';
     function setup(n) {
@@ -62,30 +62,41 @@
         var b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b); gl.bufferData(gl.ARRAY_BUFFER, x[1], gl.STATIC_DRAW);
         var l = gl.getAttribLocation(pr, x[0]); gl.enableVertexAttribArray(l); gl.vertexAttribPointer(l, x[2], gl.FLOAT, false, 0, 0);
       });
-      ['uM', 'uT', 'uR', 'uD', 'uPt', 'uC', 'uV', 'uRot', 'uFront', 'uBack'].forEach(function (u) { U[u] = gl.getUniformLocation(pr, u); });
+      ['uM', 'uT', 'uR', 'uD', 'uPt', 'uA', 'uC', 'uV', 'uRot', 'uFront', 'uBack'].forEach(function (u) { U[u] = gl.getUniformLocation(pr, u); });
       gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
       gl.uniform1f(U.uD, 3.4);
       return true;
     }
 
-    var cur = { m: 0, x: 0, y: 0, r: 0, tx: 0, ty: 0 }, first = true, last = 0, time = 0, spin = 0, handle = 0;
+    var cur = { sy: 0, m: 0, x: 0, y: 0, r: 0, tx: 0, ty: 0, o: 1 }, first = true, last = 0, time = 0, spin = 0, handle = 0, acc = 0, still = 0;
     function ease(a, b, v) { v = Math.min(1, Math.max(0, (v - a) / (b - a))); return v * v * (3 - 2 * v); }
     function lerp(a, b, t) { return a + (b - a) * t; }
-    function targets() {
-      var W = st.W, H = st.H, sy = st.sy, p = Math.min(1, sy / st.heroH);
+    // Alle Ziele hängen am geglätteten Scrollwert (cur.sy), nicht am rohen Scroll-Event:
+    // so bleibt die Bewegung stetig, egal wie unregelmäßig der Browser Scroll-Events liefert.
+    function targets(sy) {
+      var W = st.W, H = st.H, p = Math.min(1, sy / st.heroH);
       if (st.reduce) return { x: W / 2, y: H / 2, r: Math.min(W, H) * 0.44, m: 0 };
       var wide = W >= 1000, tiny = st.sr < 45;
       var ax = wide ? W * 0.78 : W * 0.5, ay = H * (wide ? 0.54 : 0.52), ar = wide ? Math.min(W * 0.3, H * 0.55) : Math.min(W * 0.55, H * 0.38);
       var mv = tiny ? 1 : ease(0.5, 1, p), h6 = st.heroH * 0.6;
       return {
-        x: lerp(st.sx, ax, mv), y: lerp(st.sY - sy, ay, mv), r: lerp(tiny ? ar : st.sr, ar, mv),
+        // Parallaxe 0,7: die Wolke klebt nicht 1:1 am Inhalt, dadurch wirkt sie ruhig statt nachzuziehen
+        x: lerp(st.sx, ax, mv), y: lerp(st.sY - sy * 0.7, ay, mv), r: lerp(tiny ? ar : st.sr, ar, mv),
         m: Math.min(1, sy / h6) + 2 * Math.min(1, Math.max(0, (sy - h6) / Math.max(1, st.docMax - h6 - 40)))
       };
+    }
+    // Deckkraft: im Hero voll, danach gedämpft (sichert AA-Kontrast für Text über der Wolke).
+    // Es zählt der jeweils weiter gescrollte Wert (roh oder geglättet), damit die Wolke nie zu kräftig nachläuft.
+    function alpha() {
+      if (st.reduce) return 1;
+      if (st.sr < 45) return st.amb;
+      var p = Math.min(1, Math.max(st.sy, cur.sy) / st.heroH);
+      return 1 + (st.amb - 1) * ease(0.2, 0.7, p);
     }
     function draw() {
       var dpr = st.dpr, ax = 0.42 + cur.ty * 0.18 + cur.m * 0.06, ay = spin + cur.m * 0.9 + cur.tx * 0.25;
       var cx = Math.cos(ax), sx = Math.sin(ax), cy = Math.cos(ay), sy = Math.sin(ay);
-      gl.uniform1f(U.uM, cur.m); gl.uniform1f(U.uT, time);
+      gl.uniform1f(U.uM, cur.m); gl.uniform1f(U.uT, time); gl.uniform1f(U.uA, cur.o);
       gl.uniform2f(U.uC, cur.x * dpr, cur.y * dpr); gl.uniform1f(U.uR, cur.r * dpr);
       gl.uniformMatrix3fv(U.uRot, false, [cy, sx * sy, -cx * sy, 0, cx, sx, sy, -sx * cy, cx * cy]);
       gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
@@ -95,17 +106,23 @@
     function frame(now) {
       handle = 0;
       var dt = last ? Math.min(0.1, (now - last) / 1000) : 0.016;
-      if (!st.hv && last && dt < 0.03) { schedule(); return; } // außerhalb des Hero genügen ~30 fps
       last = now;
-      var g = targets();
-      var k = 1 - Math.exp(-dt * 3.2), kp = 1 - Math.exp(-dt * 9), kt = 1 - Math.exp(-dt * 2);
-      cur.m += (g.m - cur.m) * k; cur.x += (g.x - cur.x) * kp; cur.y += (g.y - cur.y) * kp; cur.r += (g.r - cur.r) * kp;
+      // Ruhezustand außerhalb des Hero: nichts scrollt, nichts morpht -> halbe Bildrate genügt für die langsame Drift
+      if (!st.hv && still > 0.6) { acc += dt; if (acc < 0.03) { schedule(); return; } dt = acc; }
+      acc = 0;
+      var ks = 1 - Math.exp(-dt * 7.5), k = 1 - Math.exp(-dt * 4), kt = 1 - Math.exp(-dt * 2);
+      var dsy = st.sy - cur.sy;
+      cur.sy = Math.abs(dsy) < 0.05 ? st.sy : cur.sy + dsy * ks;
+      var g = targets(cur.sy);
+      cur.m += (g.m - cur.m) * k; cur.x = g.x; cur.y = g.y; cur.r = g.r;
       cur.tx += (st.px - cur.tx) * kt; cur.ty += (st.py - cur.ty) * kt;
+      cur.o = alpha();
+      still = (Math.abs(dsy) > 0.5 || Math.abs(g.m - cur.m) > 0.002) ? 0 : still + dt;
       time += dt; spin += dt * 0.07;
       draw(); schedule();
     }
     function schedule() { if (st.run && !st.reduce && !handle) handle = raf(frame); }
-    function snap() { var g = targets(); cur.m = g.m; cur.x = g.x; cur.y = g.y; cur.r = g.r; if (st.reduce) { spin = 0.6; time = 0; } }
+    function snap() { cur.sy = st.sy; var g = targets(cur.sy); cur.o = alpha(); cur.m = g.m; cur.x = g.x; cur.y = g.y; cur.r = g.r; if (st.reduce) { spin = 0.6; time = 0; } }
 
     return function (msg) {
       var wasRun = st.run;
@@ -114,13 +131,14 @@
       if (msg.W) {
         var bw = Math.max(1, Math.round(st.W * st.dpr)), bh = Math.max(1, Math.round(st.H * st.dpr));
         if (canvas.width !== bw || canvas.height !== bh) { canvas.width = bw; canvas.height = bh; }
-        gl.viewport(0, 0, bw, bh); gl.uniform2f(U.uV, bw, bh); gl.uniform1f(U.uPt, (st.W < 600 ? 2.7 : 3.1) * st.dpr);
+        gl.viewport(0, 0, bw, bh); gl.uniform2f(U.uV, bw, bh); gl.uniform1f(U.uPt, (st.W < 600 ? 2.8 : 3.1) * st.dpr);
       }
       if (msg.front) { gl.uniform3fv(U.uFront, msg.front); gl.uniform3fv(U.uBack, msg.back); }
       if (first) snap();
       if (st.reduce) { snap(); draw(); return; }
       if (!st.run) { if (handle) { caf(handle); handle = 0; } last = 0; return; }
       if (!wasRun) last = 0;
+      if ('sy' in msg || 'px' in msg) still = 0;
       schedule();
     };
   }
@@ -133,37 +151,24 @@
   var slot = d.querySelector('.hero-art'), hero = d.querySelector('.hero');
   if (!slot || !hero) return;
   var mqReduce = w.matchMedia('(prefers-reduced-motion: reduce)'), mqDark = w.matchMedia('(prefers-color-scheme: dark)'), mqFine = w.matchMedia('(hover: hover) and (pointer: fine)');
-  var reduce = mqReduce.matches, ambient = 0.17, send = null, cv = null, worker = null, opa = -1;
+  var reduce = mqReduce.matches, send = null, cv = null, worker = null, mobile = Math.min(w.screen.width || w.innerWidth, w.screen.height || w.innerHeight) < 600, lastW = -1, lastH = -1;
 
   function hex(v) { v = (v || '').trim().replace('#', ''); if (v.length === 3) v = v.replace(/./g, '$&$&'); var n = parseInt(v, 16) || 0; return [(n >> 16 & 255) / 255, (n >> 8 & 255) / 255, (n & 255) / 255]; }
   function colors() {
     var cs = getComputedStyle(root);
-    ambient = parseFloat(cs.getPropertyValue('--pc-ambient')) || 0.17;
-    return { front: hex(cs.getPropertyValue('--pc-front')), back: hex(cs.getPropertyValue('--pc-back')) };
+    return { front: hex(cs.getPropertyValue('--pc-front')), back: hex(cs.getPropertyValue('--pc-back')), amb: parseFloat(cs.getPropertyValue('--pc-ambient')) || 0.17 };
   }
   function geo() {
     var sy = w.scrollY || w.pageYOffset, r = slot.getBoundingClientRect(), W, H;
     if (reduce) { W = r.width; H = r.height; } else { W = cv.clientWidth || w.innerWidth; H = cv.clientHeight || w.innerHeight; }
     return {
-      W: W, H: H, dpr: Math.min(w.devicePixelRatio || 1, 2), sy: sy,
+      W: W, H: H, dpr: Math.min(w.devicePixelRatio || 1, mobile ? 1.75 : 2), sy: sy,
       sx: r.left + r.width / 2, sY: r.top + sy + r.height / 2, sr: Math.min(r.width, r.height) * 0.44,
-      heroH: hero.offsetHeight || 1, docMax: Math.max(1, root.scrollHeight - w.innerHeight)
+      heroH: hero.offsetHeight || 1, docMax: Math.max(1, root.scrollHeight - (reduce ? w.innerHeight : H))
     };
   }
-  function ease(a, b, v) { v = Math.min(1, Math.max(0, (v - a) / (b - a))); return v * v * (3 - 2 * v); }
-  // Deckkraft der Ebene: im Hero voll, danach gedämpft (sichert AA-Kontrast für Text über der Wolke)
-  function opacity() {
-    if (!root.classList.contains('pc-on')) return 0;
-    if (reduce) return 1;
-    var r = slot.getBoundingClientRect();
-    if (Math.min(r.width, r.height) * 0.44 < 45) return ambient;
-    var p = Math.min(1, (w.scrollY || w.pageYOffset) / (hero.offsetHeight || 1));
-    return 1 + (ambient - 1) * ease(0.5, 0.95, p);
-  }
-  function setOpacity() { var o = Math.round(opacity() * 100) / 100; if (o !== opa) { cv.style.opacity = o; opa = o; } }
-
   function onMsg(m) {
-    if (m.t === 'ready') { root.classList.add('pc-on'); setOpacity(); }
+    if (m.t === 'ready') root.classList.add('pc-on');
     else if (m.t === 'fail') { if (worker) { worker.terminate(); worker = null; cv.remove(); mainThread(); } else root.classList.add('pc-off'); }
   }
   function mkCanvas() {
@@ -171,8 +176,8 @@
     if (reduce) slot.appendChild(cv); else d.body.insertBefore(cv, d.body.firstChild);
   }
   function first() {
-    var c = colors(), g = geo(); g.n = Math.min(w.innerWidth, w.innerHeight) < 600 ? 2600 : 4200;
-    g.front = c.front; g.back = c.back; g.reduce = reduce; g.run = !d.hidden; g.hv = true;
+    var c = colors(), g = geo(); g.n = mobile ? 2400 : 4200;
+    g.front = c.front; g.back = c.back; g.amb = c.amb; g.reduce = reduce; g.run = !d.hidden; g.hv = true;
     send(g);
   }
   function mainThread() {
@@ -196,8 +201,8 @@
         worker.onmessage = function (e) { onMsg(e.data); };
         worker.onerror = function () { onMsg({ t: 'fail' }); };
         send = function (m, tr) { worker.postMessage(m, tr || []); };
-        var c = colors(), g = geo(); g.n = Math.min(w.innerWidth, w.innerHeight) < 600 ? 2600 : 4200;
-        g.front = c.front; g.back = c.back; g.reduce = reduce; g.run = !d.hidden; g.hv = true; g.canvas = off;
+        var c = colors(), g = geo(); g.n = mobile ? 2400 : 4200;
+        g.front = c.front; g.back = c.back; g.amb = c.amb; g.reduce = reduce; g.run = !d.hidden; g.hv = true; g.canvas = off;
         send(g, [off]);
       } catch (e) { if (worker) worker.terminate(); worker = null; if (cv) cv.remove(); mainThread(); }
     } else { cv.remove(); mainThread(); }
@@ -205,19 +210,25 @@
   }
 
   function bind() {
-    var pend = 0, rs = 0;
-    function onScroll() {
-      if (pend) return;
-      pend = w.requestAnimationFrame(function () { pend = 0; if (!send) return; if (!reduce) send({ sy: w.scrollY || w.pageYOffset }); setOpacity(); });
-    }
+    var rs = 0;
+    // Scroll: nur den Wert weiterreichen – keine Layout-Abfragen, keine Style-Änderungen
+    function onScroll() { if (send) send({ sy: w.scrollY || w.pageYOffset }); }
+    // Resize: die Ebene ist 100lvh hoch, die Adressleiste von iOS ändert ihre Größe also nicht.
+    // Gemessen wird gebündelt pro Frame; neu konfiguriert nur, wenn sich wirklich etwas geändert hat.
     function onResize() {
       if (rs) return;
-      rs = w.requestAnimationFrame(function () { rs = 0; if (send) { send(geo()); setOpacity(); } });
+      rs = w.requestAnimationFrame(function () {
+        rs = 0; if (!send) return;
+        var g = geo();
+        if (g.W === lastW && g.H === lastH) { delete g.W; delete g.H; delete g.dpr; }
+        else { lastW = g.W; lastH = g.H; }
+        send(g);
+      });
     }
     w.addEventListener('resize', onResize, { passive: true });
     if ('ResizeObserver' in w) new ResizeObserver(onResize).observe(reduce ? slot : d.body);
     if (d.fonts && d.fonts.ready) d.fonts.ready.then(onResize);
-    var onTheme = function () { if (send) { send(colors()); setOpacity(); } };
+    var onTheme = function () { if (send) send(colors()); };
     if (mqDark.addEventListener) mqDark.addEventListener('change', onTheme); else if (mqDark.addListener) mqDark.addListener(onTheme);
     if (reduce) return;
     w.addEventListener('scroll', onScroll, { passive: true });
