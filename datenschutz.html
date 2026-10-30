@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Datenschutz – Michael</title>
+<meta name="description" content="Datenschutzerklärung: Diese Website nutzt keine Cookies, kein Tracking und keine externen Dienste.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f6f4ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111917" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://preview.micana.de/datenschutz">
+<link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
+<style>
+@font-face{
+  font-family:"Inter Web";font-style:normal;font-weight:100 900;font-display:swap;
+  src:url("fonts/inter-latin-wght-normal.woff2") format("woff2");
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face{
+  font-family:"Inter Web";font-style:normal;font-weight:100 900;font-display:swap;
+  src:url("fonts/inter-latin-ext-wght-normal.woff2") format("woff2");
+  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+:root{
+  --bg:#f6f4ef;
+  --bg-soft:#edeae2;
+  --surface:#fffefb;
+  --text:#1d2421;
+  --muted:#575e57;
+  --accent:#1e6b64;
+  --accent-hover:#175650;
+  --accent-text:#ffffff;
+  --accent-soft:#dceae6;
+  --accent-ink:#1a5f59;
+  --border:#e0dcd1;
+  --focus:#1a5f59;
+  --disabled-bg:#ebe8e1;
+  --disabled-text:#575e57;
+  --disabled-border:#cdc8bb;
+  --shadow-sm:0 1px 2px rgba(29,36,33,.05);
+  --shadow:0 1px 2px rgba(29,36,33,.04),0 8px 24px -8px rgba(29,36,33,.10);
+  --shadow-hover:0 2px 4px rgba(29,36,33,.05),0 14px 30px -10px rgba(29,36,33,.14);
+  --shadow-lg:0 2px 4px rgba(29,36,33,.04),0 18px 40px -12px rgba(29,36,33,.16);
+  --pc-front:#1e6b64;
+  --pc-back:#c9ddd8;
+  --pc-ambient:.24;
+  --radius:24px;
+  --radius-lg:28px;
+  --radius-sm:14px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#111917;
+    --bg-soft:#15201d;
+    --surface:#1d2b27;
+    --text:#e9efec;
+    --muted:#a9b8b2;
+    --accent:#6cc2b5;
+    --accent-hover:#8ad2c7;
+    --accent-text:#0c1513;
+    --accent-soft:#20403a;
+    --accent-ink:#86d0c4;
+    --border:#2c403a;
+    --focus:#8ad2c7;
+    --disabled-bg:#141e1b;
+    --disabled-text:#9eada7;
+    --disabled-border:#344a44;
+    --pc-front:#6cc2b5;
+    --pc-back:#1f3a35;
+    --pc-ambient:.28;
+    --shadow-sm:0 1px 2px rgba(0,0,0,.25);
+    --shadow:0 1px 2px rgba(0,0,0,.22),0 8px 24px -10px rgba(0,0,0,.4);
+    --shadow-hover:0 2px 4px rgba(0,0,0,.24),0 14px 30px -12px rgba(0,0,0,.5);
+    --shadow-lg:0 2px 4px rgba(0,0,0,.2),0 18px 40px -14px rgba(0,0,0,.45);
+  }
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);
+  font-family:"Inter Web","Inter",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-size:clamp(1.0625rem,1rem + .25vw,1.125rem);line-height:1.65;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  overflow-wrap:break-word;hyphens:auto}
+h1,h2,h3{line-height:1.2;margin:0;letter-spacing:-.02em;font-weight:700;text-wrap:balance}
+p,ul,address{margin:0}
+p{text-wrap:pretty}
+address{font-style:normal}
+a{color:var(--accent-ink);text-underline-offset:3px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:8px}
+.skip-link{position:absolute;left:1rem;top:1rem;z-index:100;background:var(--surface);color:var(--text);padding:.75rem 1.1rem;border-radius:12px;
+  box-shadow:var(--shadow-lg);font-weight:600;text-decoration:none;transform:translateY(-200%);transition:transform .15s ease}
+.skip-link:focus,.skip-link:focus-visible{transform:none}
+.sprite{position:absolute;width:0;height:0;overflow:hidden}
+.i{display:block;width:1.25rem;height:1.25rem;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.tile{display:inline-grid;place-items:center;flex:none;background:var(--accent-soft);color:var(--accent-ink);border-radius:var(--radius-sm)}
+.tile-lg{width:3.25rem;height:3.25rem;border-radius:16px}.tile-lg .i{width:1.6rem;height:1.6rem}
+.tile-sm{width:2rem;height:2rem;border-radius:10px}.tile-sm .i{width:1.1rem;height:1.1rem}
+.container{width:100%;max-width:820px;margin-inline:auto;padding-inline:clamp(1.25rem,4vw,2.5rem);
+  padding-left:max(clamp(1.25rem,4vw,2.5rem),env(safe-area-inset-left,0px));padding-right:max(clamp(1.25rem,4vw,2.5rem),env(safe-area-inset-right,0px))}
+.back{display:inline-flex;align-items:center;gap:.5rem;min-height:2.75rem;padding:.5rem 1.05rem .5rem .8rem;border-radius:999px;
+  background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow-sm);color:var(--text);font-weight:600;font-size:.9375rem;text-decoration:none;
+  transition:border-color .2s ease,box-shadow .2s ease}
+.back:hover{border-color:var(--accent);box-shadow:var(--shadow)}
+.back .i{width:1.1rem;height:1.1rem;color:var(--accent-ink)}
+.page-top{padding-top:calc(env(safe-area-inset-top,0px) + clamp(1.5rem,5vw,3rem))}
+.page-head{padding-block:clamp(2rem,6vw,3.5rem) clamp(1.75rem,4vw,2.5rem)}
+.eyebrow{display:inline-flex;align-items:center;gap:.6rem;font-size:.8125rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink);margin-bottom:1rem}
+.page-head h1{font-size:clamp(2.25rem,6vw,3.25rem);letter-spacing:-.03em;line-height:1.08;hyphens:manual}
+.page-head .lead{color:var(--muted);margin-top:1rem;font-size:1.125rem;max-width:60ch}
+.stand{display:inline-flex;align-items:center;gap:.45rem;margin-top:1.25rem;color:var(--muted);font-size:.9375rem}
+.stand .i{width:1.05rem;height:1.05rem}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);
+  padding:clamp(1.5rem,4vw,2.25rem);margin-bottom:1.25rem}
+.card h2{font-size:clamp(1.25rem,2.4vw,1.5rem);display:flex;align-items:center;gap:.85rem;margin-bottom:1rem;hyphens:manual}
+.card h3{font-size:1.0625rem;margin:1.5rem 0 .5rem}
+.card p+p,.card p+ul,.card ul+p,.card address+p,.card p+address,.card dl+p{margin-top:.85rem}
+.card ul{padding-left:1.25rem}
+.card li+li{margin-top:.35rem}
+.card li::marker{color:var(--accent-ink)}
+.muted{color:var(--muted)}
+.card h2.toc-h{font-size:1rem;color:var(--muted);margin-bottom:.85rem}
+.card address.spaced{margin-top:.85rem}
+dl.facts{margin:0;display:grid;grid-template-columns:minmax(0,1fr);gap:.15rem 1.5rem}
+dl.facts dt{font-weight:600;color:var(--muted);font-size:.9375rem;margin-top:.6rem}
+dl.facts dt:first-child{margin-top:0}
+dl.facts dd{margin:0}
+@media (min-width:600px){dl.facts{grid-template-columns:11rem minmax(0,1fr)}dl.facts dt{margin-top:0}dl.facts dt,dl.facts dd{padding-block:.35rem}}
+mark.ph{background:#fff1b8;color:#3d3000;border-radius:6px;padding:.05em .35em;box-decoration-break:clone;-webkit-box-decoration-break:clone;font-weight:600}
+@media (prefers-color-scheme: dark){mark.ph{background:#5a4a12;color:#fff4cc}}
+.note{display:flex;gap:.85rem;align-items:flex-start;background:var(--accent-soft);border-radius:var(--radius-sm);padding:1rem 1.15rem;margin-top:1rem;font-size:.975rem}
+.note .i{color:var(--accent-ink);margin-top:.2rem}
+.highlight{border:2px solid var(--accent);box-shadow:var(--shadow-lg)}
+.highlight h2{color:var(--text)}
+.toc{list-style:none;padding:0!important;display:flex;flex-wrap:wrap;gap:.5rem}
+.toc li+li{margin-top:0!important}
+.toc a{display:inline-block;padding:.4rem .85rem;border-radius:999px;background:var(--bg-soft);border:1px solid var(--border);text-decoration:none;color:var(--text);font-size:.9375rem;font-weight:500}
+.toc a:hover{border-color:var(--accent)}
+main{padding-bottom:clamp(3rem,8vw,5rem)}
+footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted);font-size:.9375rem}
+.footer-inner{display:flex;flex-wrap:wrap;gap:1rem 2rem;align-items:center;justify-content:space-between}
+.footer-legal{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.5rem 1.25rem}
+.footer-legal a[aria-current="page"]{color:var(--text);font-weight:600;text-decoration:none}
+.num{font-variant-numeric:tabular-nums}
+@media (max-width:599.98px){
+  .card{border-radius:20px;padding:1.35rem 1.25rem}
+  footer{font-size:1rem;padding-bottom:calc(2.5rem + env(safe-area-inset-bottom,0px))}
+}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
+@media (forced-colors: active){.card,.back,.tile,.toc a{border:1px solid CanvasText}mark.ph{forced-color-adjust:none;background:Mark;color:MarkText}}
+@media print{
+  :root{--bg:#fff;--bg-soft:#fff;--surface:#fff;--text:#000;--muted:#222;--accent:#000;--accent-ink:#000;--accent-soft:#fff;--border:#999}
+  *,*::before,*::after{box-shadow:none!important}
+  .skip-link,.back,.tile,.toc,.page-top{display:none!important}
+  .card{border:1px solid #999;border-radius:8px;break-inside:avoid}
+  .container{max-width:none;padding-inline:0}
+}
+
+</style>
+</head>
+<body>
+<a class="skip-link" href="#inhalt">Zum Inhalt springen</a>
+<svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false"><defs><symbol id="i-zurueck" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m11 6-6 6 6 6"/></symbol><symbol id="i-uhr" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol><symbol id="i-dokument" viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 13h6M10 17h4"/></symbol><symbol id="i-schild" viewBox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.3 7.5 9.5 4.3-1.2 7.5-4.9 7.5-9.5V6z"/><path d="m9 12 2 2 4-4"/></symbol><symbol id="i-kompass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></symbol><symbol id="i-gebaeude" viewBox="0 0 24 24"><rect x="3" y="10" width="7" height="10" rx="1.5"/><rect x="14" y="4" width="7" height="16" rx="1.5"/><path d="M6.5 14h0M17.5 8h0M17.5 12h0M17.5 16h0"/></symbol><symbol id="i-standort" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol><symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></symbol><symbol id="i-warnung" viewBox="0 0 24 24"><path d="M10.3 4.2 2.6 18a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 4.2a2 2 0 0 0-3.4 0z"/><path d="M12 9.5v4"/><path d="M12 17h.01"/></symbol><symbol id="i-pfeil" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></symbol></defs></svg>
+<div class="container page-top">
+  <a class="back" href="./"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-zurueck"/></svg>Zur Startseite</a>
+</div>
+<main id="inhalt" tabindex="-1">
+  <div class="container">
+    <div class="page-head">
+      <p class="eyebrow"><span class="tile tile-sm" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-schild"/></svg></span>Rechtliches</p>
+      <h1>Datenschutz</h1>
+      <p class="lead">Datenschutzerklärung in Kurzform: keine Cookies, kein Tracking, keine externen Dienste. Hier steht, welche Daten trotzdem technisch anfallen.</p>
+      <p class="stand"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-uhr"/></svg>Stand: Oktober 2026</p>
+    </div>
+
+    <!-- PLATZHALTER: Alle gelb markierten Stellen [ … ] vor dem Livegang ausfüllen und die <mark class="ph">-Markierung entfernen. -->
+    <nav class="card" aria-labelledby="toc-h">
+      <h2 id="toc-h" class="toc-h">Auf dieser Seite</h2>
+      <ul class="toc">
+        <li><a href="#verantwortlicher">Verantwortlicher</a></li>
+        <li><a href="#ueberblick">Auf einen Blick</a></li>
+        <li><a href="#hosting">Hosting</a></li>
+        <li><a href="#email">Kontakt per E-Mail</a></li>
+        <li><a href="#rechte">Ihre Rechte</a></li>
+        <li><a href="#widerspruch">Widerspruch</a></li>
+        <li><a href="#beschwerde">Beschwerde</a></li>
+      </ul>
+    </nav>
+
+    <section class="card" aria-labelledby="verantwortlicher">
+      <h2 id="verantwortlicher"><span class="tile tile-sm" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-gebaeude"/></svg></span>1. Verantwortlicher</h2>
+      <p>Verantwortlich für die Datenverarbeitung auf dieser Website im Sinne der Datenschutz-Grundverordnung (DSGVO) ist:</p>
+      <address class="spaced">
+        <mark class="ph">[Vor- und Nachname]</mark><br>
+        <mark class="ph">[Straße Hausnummer]</mark><br>
+        <mark class="ph">[PLZ Ort]</mark><br>
+        Deutschland<br>
+        E-Mail: <mark class="ph">[E-Mail-Adresse]</mark>
+      </address>
+      <p>Ein Datenschutzbeauftragter ist nicht bestellt, da hierzu keine gesetzliche Pflicht besteht.</p>
+    </section>
+
+    <section class="card" aria-labelledby="ueberblick">
+      <h2 id="ueberblick"><span class="tile tile-sm" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-schild"/></svg></span>2. Auf einen Blick</h2>
+      <p>Diese Website ist bewusst sparsam gebaut:</p>
+      <ul>
+        <li>Es werden keine Cookies gesetzt und keine vergleichbaren Speichertechniken wie Local Storage genutzt.</li>
+        <li>Es gibt kein Tracking, keine Analyse- oder Statistikdienste und keine Werbung.</li>
+        <li>Es werden keine Inhalte von Drittanbietern eingebunden. Die Schrift Inter wird von diesem Server geladen, nicht von Google oder anderen Anbietern.</li>
+        <li>Es gibt keine Kontaktformulare, keine Anmeldung und keine Kommentarfunktion.</li>
+        <li>Die animierte Grafik auf der Startseite wird vollständig in Ihrem Browser berechnet. Dabei werden keine Daten übertragen.</li>
+      </ul>
+      <p>Personenbezogene Daten fallen daher nur beim Hosting (Abschnitt&nbsp;3) und gegebenenfalls bei einer Kontaktaufnahme per E-Mail (Abschnitt&nbsp;4) an. Die Seite wird verschlüsselt per HTTPS übertragen.</p>
+    </section>
+
+    <section class="card" aria-labelledby="hosting">
+      <h2 id="hosting"><span class="tile tile-sm" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-standort"/></svg></span>3. Hosting über GitHub Pages</h2>
+      <p>Diese Website wird über den Dienst GitHub Pages bereitgestellt. Anbieter ist die GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA, ein Tochterunternehmen der Microsoft Corporation. Nach der Datenschutzerklärung von GitHub kann auch die GitHub B.V., Prins Bernhardplein 200, 1097 JB Amsterdam, Niederlande, als Verantwortliche auftreten.</p>
+      <h3>Welche Daten verarbeitet werden</h3>
+      <p>Beim Aufruf der Website überträgt Ihr Browser technisch notwendig Daten an die Server von GitHub. Nach Angaben von GitHub wird dabei Ihre IP-Adresse zu Sicherheitszwecken protokolliert. Darüber hinaus können insbesondere folgende Daten anfallen:</p>
+      <ul>
+        <li>IP-Adresse des anfragenden Geräts</li>
+        <li>Datum und Uhrzeit des Zugriffs</li>
+        <li>aufgerufene Seite oder Datei</li>
+        <li>Referrer (die zuvor besuchte Seite), sofern Ihr Browser ihn übermittelt</li>
+        <li>Browsertyp, Betriebssystem und Geräteinformationen (User-Agent)</li>
+      </ul>
+      <p>Für die schnelle Auslieferung nutzt GitHub ein Content-Delivery-Netzwerk der Fastly, Inc. (USA), das GitHub für GitHub Pages einsetzt. Ich selbst habe keinen Zugriff auf diese Protokolle und werte sie nicht aus. Wie lange GitHub sie speichert, legt GitHub fest.</p>
+      <h3>Zweck und Rechtsgrundlage</h3>
+      <p>Die Verarbeitung ist erforderlich, um Ihnen die Website auszuliefern und ihren sicheren, stabilen Betrieb zu gewährleisten. Rechtsgrundlage ist Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;f DSGVO. Mein berechtigtes Interesse liegt in einer zuverlässigen und sicheren Bereitstellung dieser Website.</p>
+      <h3>Übermittlung in die USA</h3>
+      <p>Dabei können Daten in die USA übermittelt werden. Für die USA besteht ein Angemessenheitsbeschluss der EU-Kommission nach Art.&nbsp;45 DSGVO (EU-US Data Privacy Framework, Durchführungsbeschluss (EU) 2023/1795). GitHub ist nach diesem Rahmen zertifiziert. Die Zertifizierung können Sie auf der <a href="https://www.dataprivacyframework.gov/participant/6174" rel="noopener">Website des Data Privacy Framework</a> einsehen.</p>
+      <p>Weitere Informationen finden Sie in der <a href="https://docs.github.com/de/site-policy/privacy-policies/github-general-privacy-statement" rel="noopener">Datenschutzerklärung von GitHub</a>.</p>
+      <!-- PRÜFEN: Ob für dieses Konto ein Auftragsverarbeitungsvertrag (GitHub Data Protection Agreement) besteht bzw. abgeschlossen werden kann.
+           Falls ja, hier ergänzen: „Mit GitHub besteht ein Vertrag über die Auftragsverarbeitung nach Art. 28 DSGVO.“
+           Stand der Prüfung Oktober 2026: Vor GitHub ist kein weiterer Proxy/CDN (z. B. Cloudflare) geschaltet;
+           DNS zeigt per CNAME auf michael-linuxdev.github.io, Antwort-Header: Server GitHub.com, Via varnish / Fastly.
+           Wird später ein weiterer Dienst vorgeschaltet (z. B. Cloudflare), muss er hier als eigener Abschnitt ergänzt werden. -->
+    </section>
+
+    <section class="card" aria-labelledby="email">
+      <h2 id="email"><span class="tile tile-sm" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-person"/></svg></span>4. Kontakt per E-Mail</h2>
+      <p>Eine Kontaktadresse wird in Kürze ergänzt. Wenn Sie mir dann eine E-Mail schreiben, verarbeite ich Ihre Adresse und die Angaben aus Ihrer Nachricht, um Ihr Anliegen zu bearbeiten.</p>
+      <p>Rechtsgrundlage ist Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;b DSGVO, wenn Ihre Anfrage mit einem Vertrag oder dessen Anbahnung zusammenhängt, sonst Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;f DSGVO. Mein berechtigtes Interesse liegt in der Beantwortung Ihrer Anfrage. Ich lösche Ihre Daten, sobald sie dafür nicht mehr erforderlich sind, sofern keine gesetzlichen Aufbewahrungspflichten, etwa nach Handels- oder Steuerrecht, entgegenstehen.</p>
+      <p>Die E-Mails werden bei meinem E-Mail-Anbieter <mark class="ph">[Name und Sitz des E-Mail-Anbieters]</mark> gespeichert.</p>
+      <!-- Sobald die Adresse existiert: Satz „Eine Kontaktadresse wird in Kürze ergänzt.“ ersetzen durch
+           „Sie können mich per E-Mail an <a href="mailto:ADRESSE">ADRESSE</a> erreichen.“
+           Beim E-Mail-Anbieter einen Auftragsverarbeitungsvertrag abschließen; sitzt er außerhalb der EU, Drittlandübermittlung ergänzen. -->
+    </section>
+
+    <section class="card" aria-labelledby="rechte">
+      <h2 id="rechte"><span class="tile tile-sm" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-dokument"/></svg></span>5. Ihre Rechte</h2>
+      <p>Sie haben gegenüber mir folgende Rechte hinsichtlich Ihrer personenbezogenen Daten:</p>
+      <ul>
+        <li>Auskunft (Art.&nbsp;15 DSGVO)</li>
+        <li>Berichtigung (Art.&nbsp;16 DSGVO)</li>
+        <li>Löschung (Art.&nbsp;17 DSGVO)</li>
+        <li>Einschränkung der Verarbeitung (Art.&nbsp;18 DSGVO)</li>
+        <li>Datenübertragbarkeit (Art.&nbsp;20 DSGVO)</li>
+        <li>Widerspruch gegen die Verarbeitung (Art.&nbsp;21 DSGVO, siehe unten)</li>
+      </ul>
+      <p>Wenden Sie sich dafür formlos an die oben genannte Adresse. Eine automatisierte Entscheidungsfindung oder ein Profiling findet nicht statt. Sie sind nicht verpflichtet, personenbezogene Daten bereitzustellen; ohne die technisch notwendigen Verbindungsdaten kann die Website jedoch nicht angezeigt werden.</p>
+    </section>
+
+    <section class="card highlight" aria-labelledby="widerspruch">
+      <h2 id="widerspruch"><span class="tile tile-sm" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-warnung"/></svg></span>6. Widerspruchsrecht nach Art. 21 DSGVO</h2>
+      <p><strong>Soweit ich Daten auf Grundlage von Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;f DSGVO (berechtigtes Interesse) verarbeite, haben Sie das Recht, aus Gründen, die sich aus Ihrer besonderen Situation ergeben, jederzeit Widerspruch gegen diese Verarbeitung einzulegen.</strong></p>
+      <p>Ich verarbeite die Daten dann nicht mehr, es sei denn, ich kann zwingende schutzwürdige Gründe für die Verarbeitung nachweisen, die Ihre Interessen, Rechte und Freiheiten überwiegen, oder die Verarbeitung dient der Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen.</p>
+    </section>
+
+    <section class="card" aria-labelledby="beschwerde">
+      <h2 id="beschwerde"><span class="tile tile-sm" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-kompass"/></svg></span>7. Beschwerderecht</h2>
+      <p>Sie haben das Recht, sich bei einer Datenschutz-Aufsichtsbehörde zu beschweren (Art.&nbsp;77 DSGVO), insbesondere in dem Mitgliedstaat Ihres Aufenthaltsorts, Ihres Arbeitsplatzes oder des mutmaßlichen Verstoßes. Für mich zuständig ist:</p>
+      <p><mark class="ph">[Name der Landesdatenschutzbehörde des Bundeslands]</mark><br><mark class="ph">[Anschrift / Website der Behörde]</mark></p>
+      <!-- Zuständig ist die Aufsichtsbehörde des Bundeslands, in dem der Unternehmenssitz liegt.
+           Übersicht: https://www.bfdi.bund.de/DE/Service/Anschriften/Laender/Laender-node.html -->
+    </section>
+
+    <section class="card" aria-labelledby="aenderung">
+      <h2 id="aenderung"><span class="tile tile-sm" aria-hidden="true"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-uhr"/></svg></span>8. Aktualität</h2>
+      <p>Diese Datenschutzerklärung hat den Stand Oktober&nbsp;2026. Ändert sich die Technik der Website oder die Rechtslage, passe ich sie an.</p>
+    </section>
+
+  </div>
+</main>
+<footer>
+  <div class="container footer-inner">
+    <p>© <span class="num">2026</span> Michael</p>
+    <nav aria-label="Rechtliches">
+      <ul class="footer-legal"><li><a href="./">Startseite</a></li><li><a href="impressum.html">Impressum</a></li><li><a href="datenschutz.html" aria-current="page">Datenschutz</a></li></ul>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>
