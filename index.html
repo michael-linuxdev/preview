@@ -2,9 +2,9 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Michael – IT-Beratung für KMU &amp; Unternehmensgruppen</title>
-<meta name="description" content="Michael – IT-Beratung für KMU und Unternehmensgruppen: IT als Wettbewerbsvorteil, ausgerichtet an Ihren Unternehmenszielen – mit klarer Steuerung, beherrschbaren Risiken und spürbarem Nutzen für das Geschäft.">
+<meta name="description" content="Michael – IT-Beratung und individuelle Entwicklung für KMU und Unternehmensgruppen: IT als Wettbewerbsvorteil, ausgerichtet an Ihren Unternehmenszielen – mit klarer Steuerung, beherrschbaren Risiken und spürbarem Nutzen für das Geschäft.">
 <meta name="author" content="Michael">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#f6f4ef" media="(prefers-color-scheme: light)">
@@ -34,8 +34,8 @@
   "@context": "https://schema.org",
   "@type": "ProfessionalService",
   "@id": "https://preview.micana.de/#service",
-  "name": "Michael – IT-Beratung",
-  "description": "Michael – IT-Beratung für KMU und Unternehmensgruppen: IT als Wettbewerbsvorteil, ausgerichtet an Ihren Unternehmenszielen – mit klarer Steuerung, beherrschbaren Risiken und spürbarem Nutzen für das Geschäft.",
+  "name": "Michael – IT-Beratung und individuelle Entwicklung",
+  "description": "Michael – IT-Beratung und individuelle Entwicklung für KMU und Unternehmensgruppen: IT als Wettbewerbsvorteil, ausgerichtet an Ihren Unternehmenszielen – mit klarer Steuerung, beherrschbaren Risiken und spürbarem Nutzen für das Geschäft.",
   "url": "https://preview.micana.de/",
   "image": "https://preview.micana.de/og-image.png",
   "logo": "https://preview.micana.de/apple-touch-icon.png",
@@ -45,21 +45,33 @@
     "Microsoft 365 und Identitäten",
     "IT-Steuerung und Sicherheit",
     "Governance und Richtlinien",
-    "Wirtschaftlichkeit und Kostentransparenz"
+    "Wirtschaftlichkeit und Kostentransparenz",
+    "Individuelle Softwareentwicklung",
+    "Webentwicklung",
+    "Fachanwendungen"
   ],
-  "makesOffer": {
-    "@type": "Offer",
-    "itemOffered": {
-      "@type": "Service",
-      "name": "IT-Beratung",
-      "serviceType": "IT-Beratung",
-      "description": "IT-Beratung für KMU und Unternehmensgruppen – die IT als Gesamtsystem aus Technik, Abläufen, Sicherheit und Kosten betrachtet.",
-      "audience": {
-        "@type": "BusinessAudience",
-        "name": "KMU und Unternehmensgruppen"
+  "makesOffer": [
+    {
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Service",
+        "name": "IT-Beratung",
+        "serviceType": "IT-Beratung",
+        "description": "IT-Beratung für KMU und Unternehmensgruppen – die IT als Gesamtsystem aus Technik, Abläufen, Sicherheit und Kosten betrachtet.",
+        "audience": {"@type": "BusinessAudience", "name": "KMU und Unternehmensgruppen"}
+      }
+    },
+    {
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Service",
+        "name": "Individuelle Entwicklung",
+        "serviceType": "Individuelle Software- und Webentwicklung",
+        "description": "Websites und Fachanwendungen, die Ihre Prozesse abbilden – individuell entwickelt oder effizient auf Basis bewährter Vorlagen.",
+        "audience": {"@type": "BusinessAudience", "name": "KMU und Unternehmensgruppen"}
       }
     }
-  },
+  ],
   "founder": {
     "@type": "Person",
     "@id": "https://preview.micana.de/#person",
@@ -150,7 +162,7 @@ a:hover{text-decoration-thickness:2px}
   transform:translateY(-200%);transition:transform .15s ease;
 }
 .skip-link:focus,.skip-link:focus-visible{transform:none}
-.container{width:100%;max-width:1160px;margin-inline:auto;padding-inline:clamp(1.25rem,4vw,2.5rem)}
+.container{width:100%;max-width:1160px;margin-inline:auto;padding-inline:clamp(1.25rem,4vw,2.5rem);padding-left:max(clamp(1.25rem,4vw,2.5rem),env(safe-area-inset-left,0px));padding-right:max(clamp(1.25rem,4vw,2.5rem),env(safe-area-inset-right,0px))}
 section{padding-block:clamp(4rem,9vw,7rem)}
 .eyebrow{
   display:inline-block;font-size:.8125rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
@@ -188,6 +200,7 @@ section{padding-block:clamp(4rem,9vw,7rem)}
 }
 @media (max-width:420px){.hero .role{font-size:.8125rem;padding:.4rem .85rem .4rem .65rem;gap:.5rem}}
 @media (max-width:380px){.hero .role{font-size:.75rem;letter-spacing:0}}
+@media (max-width:359.98px){.hero .role{font-size:.6875rem;padding:.35rem .7rem .35rem .55rem;gap:.4rem}}
 .hero .role .dot{flex:none;width:.55rem;height:.55rem;border-radius:50%;background:var(--accent)}
 .hero h1{font-size:clamp(2.5rem,6.2vw,4.25rem);letter-spacing:-.03em;line-height:1.05}
 .hero h1 .accent{color:var(--accent-ink);display:block;font-weight:600;font-size:.52em;letter-spacing:-.02em;margin-top:.75rem}
@@ -207,6 +220,7 @@ section{padding-block:clamp(4rem,9vw,7rem)}
 .btn-disabled{background:var(--disabled-bg);color:var(--disabled-text);border:1px dashed var(--disabled-border);box-shadow:none;cursor:default;user-select:none}
 .contact-pending{display:inline-flex;align-items:center;gap:.45rem;color:var(--disabled-text);cursor:default}
 .contact-pending svg{width:1em;height:1em;flex:none}
+
 
 
 /* Leistungen – Karten */
@@ -238,7 +252,7 @@ section.group{padding:0}
 .more{margin-top:clamp(2rem,4vw,2.5rem)}
 .more>summary{
   list-style:none;display:flex;align-items:center;justify-content:center;gap:.6rem;width:fit-content;margin-inline:auto;
-  min-height:3rem;padding:.75rem 1.4rem;border-radius:999px;cursor:pointer;user-select:none;
+  min-height:3rem;padding:.75rem 1.4rem;border-radius:999px;cursor:pointer;text-align:center;user-select:none;
   background:var(--surface);color:var(--accent-ink);font-weight:600;
   border:1px solid color-mix(in srgb,var(--accent) 75%,var(--border));box-shadow:var(--shadow-sm);
   transition:background-color .2s ease,box-shadow .2s ease;
@@ -256,7 +270,8 @@ section.group{padding:0}
 @media (prefers-reduced-motion:reduce){.more .chev,.more>summary{transition:none}}
 
 /* IT-Beratung */
-#it-beratung{background:var(--bg-soft)}
+#angebot{background:var(--bg-soft)}
+.offer-dev{margin-top:clamp(2.5rem,5vw,3.5rem)}
 .offer{
   background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow);
   padding:clamp(2rem,5vw,3.5rem);display:grid;gap:clamp(2rem,4vw,3rem);grid-template-columns:minmax(0,1fr);
@@ -332,6 +347,57 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
 .footer-legal{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.5rem 1.25rem}
 @media (min-width:720px){.footer-legal{justify-content:flex-end}}
 
+/* Mobile: Erstansicht füllt den Bildschirm */
+@media (max-width:767.98px){
+  .hero::before{display:none}
+  .hero{
+    min-height:100vh;min-height:100svh;display:flex;flex-direction:column;
+    padding-top:calc(env(safe-area-inset-top,0px) + clamp(1.5rem,6svh,3.25rem));
+    padding-bottom:calc(env(safe-area-inset-bottom,0px) + clamp(1.25rem,4svh,2rem));
+  }
+  .hero-grid{flex:1 1 auto;display:flex;flex-direction:column;align-items:stretch;gap:0}
+  .hero-inner{display:contents}
+  .hero .role{align-self:flex-start;margin-bottom:clamp(1.25rem,4.5svh,2.25rem)}
+  .hero h1{font-size:clamp(3rem,16.5vw,4.5rem);line-height:1;letter-spacing:-.035em}
+  .hero h1 .accent{font-size:clamp(1.4375rem,6.4vw,1.875rem);line-height:1.18;margin-top:clamp(.7rem,2svh,1rem);letter-spacing:-.022em}
+  .hero .lead{font-size:clamp(1.0625rem,4.5vw,1.1875rem);line-height:1.6;margin-top:clamp(1rem,3svh,1.5rem)}
+  .hero-art{
+    display:block;order:2;flex:1 1 0;min-height:0;position:relative;width:100%;
+    margin-block:clamp(.75rem,2.5svh,1.5rem);container-type:size;
+  }
+  .hero-art svg{display:block;width:100%;height:100%;max-height:17rem;margin-inline:auto;overflow:visible}
+  @container (max-height:104px){.hero-art svg{display:none}}
+  .actions{order:3;margin-top:0;flex-direction:column;flex-wrap:nowrap;align-items:stretch;gap:.375rem}
+  .actions .btn-primary{width:100%;min-height:3.5rem;font-size:1.0625rem}
+  .actions .btn-disabled{
+    background:none;border:0;box-shadow:none;min-height:2.75rem;padding:0;
+    font-weight:500;font-size:1rem;color:var(--disabled-text);gap:.5rem;
+  }
+}
+@media (max-width:767.98px) and (max-height:500px){
+  .hero{min-height:0;padding-top:calc(env(safe-area-inset-top,0px) + 2rem);padding-bottom:2.5rem}
+  .hero-art{display:none}
+  .actions{flex-direction:row;align-items:center;margin-top:1.75rem;gap:1.25rem}
+  .actions .btn-primary{width:auto}
+}
+@media (max-height:500px) and (orientation:landscape){
+  .hero{padding-top:calc(env(safe-area-inset-top,0px) + 2rem);padding-bottom:2.5rem}
+  .hero::before{display:none}
+}
+/* Mobile: übrige Abschnitte */
+@media (max-width:599.98px){
+  section{padding-block:3.5rem}
+  .offer{padding:1.75rem 1.25rem;border-radius:20px;gap:1.75rem}
+  .offer-main p{font-size:1.0625rem}
+  .offer-focus{padding-top:1.5rem}
+  .cta-box{padding:2rem 1.25rem;border-radius:20px}
+  .card{padding:1.25rem 1.25rem 1.35rem;border-radius:18px}
+  .card p,.step p,.group-head p{font-size:1rem}
+  .principles li{font-size:1rem}
+  .more>summary{width:100%}
+  .more-body{padding-top:2.5rem}
+  footer{font-size:1rem;padding-bottom:calc(2.5rem + env(safe-area-inset-bottom,0px))}
+}
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{transition:none!important;animation:none!important}
@@ -354,6 +420,7 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
   .hero h1 .accent{color:#000}
   .container{max-width:none;padding-inline:0}
   .offer{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:8mm}
+  .offer-dev{margin-top:8mm}
   .offer,.cta-box{border:1px solid #999;border-radius:8px;padding:5mm 6mm}
   .offer-focus{border-left:1px solid #999;border-top:0;padding:0 0 0 6mm}
   .focus-list li{padding:1.5mm 0;border-color:#ccc}
@@ -395,7 +462,7 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
         <h1 id="hero-titel">Michael <span class="accent">IT als Wettbewerbsvorteil, nicht als Kostenstelle.</span></h1>
         <p class="lead">Ich richte Ihre IT an Ihren Unternehmenszielen aus, mit klarer Steuerung, beherrschbaren Risiken und spürbarem Nutzen für das Geschäft.</p>
         <div class="actions">
-          <a class="btn btn-primary" href="#it-beratung">Mehr zur IT-Beratung</a>
+          <a class="btn btn-primary" href="#angebot">Zum Angebot</a>
           <!-- Kontakt: sobald die Adresse existiert, ersetzen durch:
           <a class="btn btn-primary" href="mailto:ADRESSE">[Mail-Icon] Kontakt aufnehmen</a> -->
           <span class="btn btn-disabled"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Kontakt in Kürze</span>
@@ -433,9 +500,9 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
     </div>
   </section>
 
-  <section id="it-beratung" aria-labelledby="beratung-titel">
+  <section id="angebot" aria-label="Angebot">
     <div class="container">
-      <div class="offer">
+      <article class="offer" id="it-beratung" aria-labelledby="beratung-titel">
         <div class="offer-main">
           <p class="eyebrow">IT-Beratung</p>
           <h2 id="beratung-titel">Beratung, die Ihre IT als Ganzes betrachtet</h2>
@@ -452,9 +519,9 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
             <li>Wirtschaftlichkeit und Kostentransparenz</li>
           </ul>
         </div>
-      </div>
+      </article>
       <details class="more" id="leistungen">
-        <summary><span class="lbl-open">Alle Leistungen im Detail anzeigen</span><span class="lbl-close">Leistungen im Detail ausblenden</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+        <summary><span class="lbl-open">Alle Beratungsleistungen im Detail anzeigen</span><span class="lbl-close">Beratungsleistungen ausblenden</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
         <div class="more-body">
           <div class="section-head more-head">
             <p class="eyebrow">Leistungen</p>
@@ -545,6 +612,24 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
           </div>
         </div>
       </details>
+      <article class="offer offer-dev" id="entwicklung" aria-labelledby="entwicklung-titel">
+        <div class="offer-main">
+          <p class="eyebrow">Individuelle Entwicklung</p>
+          <h2 id="entwicklung-titel">Software, die zu Ihren Abläufen passt</h2>
+          <p>Websites und Fachanwendungen, die Ihre Prozesse abbilden, statt sie zu verbiegen – individuell entwickelt oder effizient auf Basis bewährter Vorlagen. So entsteht Software, die Ihre Unternehmensziele unterstützt und im Alltag gern genutzt wird.</p>
+          <p class="offer-note">Individuell, wo es Ihren Vorsprung ausmacht – auf bewährter Grundlage, wo das schneller und wirtschaftlicher ist.</p>
+        </div>
+        <div class="offer-focus">
+          <h3 id="vorhaben-titel">Typische Vorhaben</h3>
+          <ul class="focus-list" aria-labelledby="vorhaben-titel">
+            <li>Websites mit klarer Struktur, barrierefrei und datensparsam</li>
+            <li>Fachanwendungen für Ihre Kernprozesse</li>
+            <li>Ablösung gewachsener Insellösungen</li>
+            <li>Anbindung an Microsoft&nbsp;365 und bestehende Systeme</li>
+            <li>Dokumente und Auswertungen direkt aus Ihren Daten</li>
+          </ul>
+        </div>
+      </article>
     </div>
   </section>
 
