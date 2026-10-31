@@ -141,32 +141,43 @@
       if (canvas.width !== bw || canvas.height !== bh) { canvas.width = bw; canvas.height = bh; }
       gl.viewport(0, 0, bw, bh); gl.uniform2f(U.uV, bw, bh); gl.uniform1f(U.uPt, (st.W < 600 ? 2.9 : 3.4) * st.dpr);
     }
+    // Erzählspanne in Scrollpixeln – Wolke bleibt darüber sichtbar und lesbar
+    function storyLen() {
+      var wide = st.W >= 1000, H = st.H;
+      return wide
+        ? Math.max(st.heroH * 1.6, Math.min(st.docMax * 0.75, st.heroH + H * 0.95))
+        : Math.max(st.heroH * 1.55, Math.min(st.docMax * 0.88, H * 2.25));
+    }
     // Ziele hängen am geglätteten Scrollwert (cur.sy): stetige Bewegung, egal wie unregelmäßig Scroll-Events kommen
     function targets(sy) {
-      var W = st.W, H = st.H, p = Math.min(1, sy / Math.max(1, st.heroH));
+      var W = st.W, H = st.H;
       if (st.reduce) return { x: W / 2, y: H / 2, r: Math.min(W, H) * 0.42, m: 3 };
       var wide = W >= 1000, tiny = st.sr < 45;
       var ax = wide ? W * 0.7 : W * 0.5, ay = H * (wide ? 0.48 : 0.52);
-      var ar = wide ? Math.min(W * 0.2, H * 0.36) : Math.min(W * 0.38, H * 0.32);
-      // Wolke bleibt lange im Hero-Slot, wandert erst spät in die Ambient-Lage
-      var mv = tiny ? 1 : ease(0.55, 1.15, p);
-      // Erzählspanne: ~1,55× Hero (Desktop) bzw. ~1,9× Viewport-Höhe – länger sichtbar und lesbar
-      var story = wide
-        ? Math.max(st.heroH * 1.55, Math.min(st.docMax * 0.72, st.heroH + H * 0.85))
-        : Math.max(st.heroH * 1.35, Math.min(st.docMax * 0.8, H * 1.9));
+      var ar = wide ? Math.min(W * 0.2, H * 0.36) : Math.min(W * 0.34, H * 0.3);
+      var story = storyLen();
       var t = Math.min(1, Math.max(0, sy / Math.max(1, story)));
+      // Während der Erzählung in der Viewport-Mitte halten – erst am Ende Ambient-Lage
+      var handoff = ease(0.78, 1.02, t);
+      var slotY = st.sY - sy;
+      var pinnedY = wide
+        ? Math.min(Math.max(slotY, H * 0.28), H * 0.56)
+        : H * 0.54;
+      var pinnedX = wide ? lerp(st.sx, ax, ease(0.25, 0.75, t)) : W * 0.5;
+      var pinnedR = tiny ? ar : (wide ? lerp(st.sr * 1.05, ar, handoff) : lerp(Math.min(W, H) * 0.37, ar, handoff));
       return {
-        x: lerp(st.sx, ax, mv), y: lerp(st.sY - sy * (wide ? 0.45 : 0.85), ay, mv),
-        r: lerp(tiny ? ar : st.sr * 1.05, ar, mv),
+        x: lerp(pinnedX, ax, handoff),
+        y: lerp(pinnedY, ay, handoff),
+        r: pinnedR,
         m: morphAt(t)
       };
     }
-    // Deckkraft: im Hero voll, danach gedämpft; Ausblendung später, damit Wachstum sichtbar bleibt
+    // Deckkraft: über die ganze Erzählspanne voll, danach Ambient
     function alpha() {
       if (st.reduce) return 1;
       if (st.sr < 45) return st.amb;
-      var wide = st.W >= 1000;
-      return 1 + (st.amb - 1) * ease(wide ? 0.85 : 0.7, wide ? 1.45 : 1.25, Math.max(st.sy, cur.sy) / st.heroH);
+      var story = storyLen();
+      return 1 + (st.amb - 1) * ease(0.9, 1.2, Math.max(st.sy, cur.sy) / Math.max(1, story));
     }
     function draw() {
       var ax = 0.34 + cur.ty * 0.1, ay = -0.36 + 0.12 * Math.sin(time * 0.09) + cur.tx * 0.2;
@@ -227,9 +238,8 @@
       var dp = Math.abs(st.px - cur.tx) + Math.abs(st.py - cur.ty);
       cur.tx += (st.px - cur.tx) * kt; cur.ty += (st.py - cur.ty) * kt;
       var o = alpha(); dv += Math.abs(o - cur.o) * 400; cur.o = o;
-      // Erzählbereich: Story-Spanne + Hero – jede Scrollbewegung zählt
-      var storyEnd = Math.max(st.heroH * 1.6, st.H * 2);
-      var act = Math.min(cur.sy, st.sy) < storyEnd && Math.abs(dsy) > 0.015;
+      // Erzählbereich: ganze Story-Spanne – jede Scrollbewegung zählt
+      var act = Math.min(cur.sy, st.sy) < storyLen() * 1.05 && Math.abs(dsy) > 0.015;
       applyScrollLod(act && Math.abs(dsy) > 2.5);
       still = (act || dv > 0.25 || dp > 0.01) ? 0 : still + dt;
       time += dt;
