@@ -123,15 +123,14 @@
     var lvl = 0, warm = 0, fs = 0, fn = 0;
     function ease(a, b, v) { v = Math.min(1, Math.max(0, (v - a) / (b - a))); return v * v * (3 - 2 * v); }
     function lerp(a, b, t) { return a + (b - a) * t; }
-    /* Morph 0..3 früher fertig: Wachstum liegt etwa dort, wo zuvor die Säulen standen.
-       Kurze Plateaus, alles innerhalb der Hero-Höhe – kein Extra-Leerraum. */
+    /* Morph 0..3: Wachstum inkl. Pfeilspitze früh fertig – schon wenn die Angebotskarte hochkommt. */
     function morphAt(t) {
-      if (t < 0.04) return 0;
-      if (t < 0.14) return ease(0.04, 0.14, t);
-      if (t < 0.22) return 1;
-      if (t < 0.34) return 1 + ease(0.22, 0.34, t);
-      if (t < 0.40) return 2;
-      if (t < 0.52) return 2 + ease(0.40, 0.52, t);
+      if (t < 0.03) return 0;
+      if (t < 0.12) return ease(0.03, 0.12, t);
+      if (t < 0.18) return 1;
+      if (t < 0.28) return 1 + ease(0.18, 0.28, t);
+      if (t < 0.32) return 2;
+      if (t < 0.42) return 2 + ease(0.32, 0.42, t);
       return 3;
     }
     function sizeCanvas() {
@@ -146,24 +145,33 @@
       var wide = W >= 1000, tiny = st.sr < 45;
       var ax = wide ? W * 0.7 : W * 0.48, ay = H * 0.5;
       var ar = wide ? Math.min(W * 0.2, H * 0.36) : Math.min(W * 0.36, H * 0.3);
-      // Wolke folgt dem Hero-Art-Slot und geht mit dem Hero; Ambient erst wenn Hero weg ist
+      // Wolke folgt dem Hero-Art-Slot; Ambient erst wenn Hero weg ist
       var mv = tiny ? 1 : ease(0.55, 1.05, p);
-      // Erzählspanne ≈ Hero; Wachstum ist bei ~0,5× Hero-Höhe fertig (früher als zuvor)
-      var story = st.heroH * (wide ? 0.85 : 0.78);
+      // Kurze Erzählspanne: Wachstum inkl. Pfeil schon bei ~0,25–0,35× Hero
+      var story = st.heroH * (wide ? 0.7 : 0.55);
       var t = Math.min(1, Math.max(0, sy / Math.max(1, story)));
+      var slotY = st.sY - sy * (wide ? 0.5 : 1);
+      var y = lerp(slotY, ay, mv);
+      var r = lerp(tiny ? ar : st.sr, ar, mv);
+      if (!wide) {
+        // Wachstum-Form ist höher: Zentrum früher nach unten, damit die Pfeilspitze nicht am oberen Rand abgeschnitten wird
+        var drop = ease(0.25, 0.45, t);
+        y = lerp(y, Math.max(y, H * 0.4), drop);
+        r = lerp(r, Math.min(r, Math.min(W, H) * 0.32), drop * 0.5);
+      }
       return {
         x: lerp(st.sx, ax, mv),
-        y: lerp(st.sY - sy * (wide ? 0.5 : 1), ay, mv),
-        r: lerp(tiny ? ar : st.sr, ar, mv),
+        y: y,
+        r: r,
         m: morphAt(t)
       };
     }
-    // Deckkraft: voll bis Wachstum gelandet ist, Ambient erst danach
+    // Deckkraft: voll bis Wachstum inkl. Pfeil gelandet ist
     function alpha() {
       if (st.reduce) return 1;
       if (st.sr < 45) return st.amb;
       var wide = st.W >= 1000;
-      return 1 + (st.amb - 1) * ease(wide ? 0.75 : 0.65, wide ? 1.15 : 1.05, Math.max(st.sy, cur.sy) / Math.max(1, st.heroH));
+      return 1 + (st.amb - 1) * ease(wide ? 0.7 : 0.55, wide ? 1.15 : 1.0, Math.max(st.sy, cur.sy) / Math.max(1, st.heroH));
     }
     function draw() {
       var ax = 0.34 + cur.ty * 0.1, ay = -0.36 + 0.12 * Math.sin(time * 0.09) + cur.tx * 0.2;
