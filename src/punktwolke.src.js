@@ -89,7 +89,7 @@
     var VS = 'attribute vec3 a0,a1,a2;attribute vec4 a3;attribute vec2 aS;' +
       'uniform float uM,uT,uR,uD,uPt,uA;uniform vec2 uC,uV;uniform mat3 uRot;uniform vec3 uFront,uBack;' +
       'varying vec3 vCol;varying float vA;' +
-      'void main(){float n=floor(min(uM,2.999)),f=uM-n;f=clamp(f*1.5-aS.x*.5,0.,1.);f=f*f*(3.-2.*f);' +
+      'void main(){float n=floor(min(uM,2.999)),f=uM-n;f=clamp(f*1.22-aS.x*.28,0.,1.);f=f*f*(3.-2.*f);' +
       'vec3 q=a3.xyz;float fa=1.;' +
       'if(a3.w>0.){float e=fract((q.y+.85)/a3.w+uT*.05/a3.w);q.y=-.85+e*a3.w;fa=smoothstep(0.,.12,e)*smoothstep(1.,.75,e);}' +
       'vec3 p=n<.5?mix(a0,a1,f):n<1.5?mix(a1,a2,f):mix(a2,q,f);' +
@@ -123,14 +123,14 @@
     var lvl = 0, warm = 0, fs = 0, fn = 0;
     function ease(a, b, v) { v = Math.min(1, Math.max(0, (v - a) / (b - a))); return v * v * (3 - 2 * v); }
     function lerp(a, b, t) { return a + (b - a) * t; }
-    /* Morph 0..3: Wachstum inkl. Pfeilspitze früh fertig – schon wenn die Angebotskarte hochkommt. */
+    /* Morph 0..3: Wachstum früh fertig; längere Blend-Fenster, kürzere Holds – flüssiger. */
     function morphAt(t) {
-      if (t < 0.03) return 0;
-      if (t < 0.12) return ease(0.03, 0.12, t);
-      if (t < 0.18) return 1;
-      if (t < 0.28) return 1 + ease(0.18, 0.28, t);
-      if (t < 0.32) return 2;
-      if (t < 0.42) return 2 + ease(0.32, 0.42, t);
+      if (t < 0.02) return 0;
+      if (t < 0.14) return ease(0.02, 0.14, t);
+      if (t < 0.17) return 1;
+      if (t < 0.30) return 1 + ease(0.17, 0.30, t);
+      if (t < 0.33) return 2;
+      if (t < 0.44) return 2 + ease(0.33, 0.44, t);
       return 3;
     }
     function sizeCanvas() {
@@ -184,18 +184,18 @@
       if (cur.o > 0.003) gl.drawArrays(gl.POINTS, 0, nDraw);
       if (first) { first = false; post({ t: 'ready' }); }
     }
-    // adaptive Qualität: erst leichte Punktereduktion, dann DPR – nie unter ~68 % der Punkte
+    // adaptive Qualität: behutsam – visuelle Dichte vor aggressivem LOD (Boden ~78 %)
     function quality(dt) {
-      if (++warm < 45) return;
+      if (++warm < 50) return;
       fs += dt; fn++;
-      if (fn < 50) return;
+      if (fn < 55) return;
       var avg = fs / fn; fs = fn = 0;
-      if (avg > 0.019 && lvl < 3) {
+      if (avg > 0.02 && lvl < 3) {
         lvl++;
-        if (lvl === 1) nDraw = Math.round(N * 0.85);
-        else if (lvl === 2) nDraw = Math.round(N * 0.68);
-        else if (st.dpr > 1.25) { st.dpr = Math.max(1.25, st.dpr * 0.8); sizeCanvas(); }
-        warm = 24; post({ t: 'q', l: lvl, n: nDraw, dpr: st.dpr });
+        if (lvl === 1) nDraw = Math.round(N * 0.9);
+        else if (lvl === 2) nDraw = Math.round(N * 0.78);
+        else if (st.dpr > 1.25) { st.dpr = Math.max(1.25, st.dpr * 0.85); sizeCanvas(); }
+        warm = 28; post({ t: 'q', l: lvl, n: nDraw, dpr: st.dpr });
       }
     }
     function frame(now) {
@@ -210,7 +210,8 @@
         dt = acc;
       } else quality(dt);
       acc = 0;
-      var ks = 1 - Math.exp(-dt * 7.5), k = 1 - Math.exp(-dt * 5.2), kt = 1 - Math.exp(-dt * 2);
+      // Morph-Lerp weicher (k kleiner) → flüssigere Stufenübergänge; Scroll-Tracking bleibt straff
+      var ks = 1 - Math.exp(-dt * 7.5), k = 1 - Math.exp(-dt * 3.35), kt = 1 - Math.exp(-dt * 2);
       var dsy = st.sy - cur.sy;
       cur.sy = Math.abs(dsy) < 0.05 ? st.sy : cur.sy + dsy * ks;
       var g = targets(cur.sy);
@@ -257,7 +258,7 @@
   var small = Math.min(w.screen.width || w.innerWidth, w.screen.height || w.innerHeight) < 600;
   var cores = nav.hardwareConcurrency || 4, mem = nav.deviceMemory;
   var low = mem !== undefined && (mem <= 2 || (mem <= 4 && cores <= 4));
-  var NPTS = low ? 1800 : small ? 2600 : 4000, DPR = low ? 1.25 : small ? 1.75 : 2;
+  var NPTS = low ? 2200 : small ? 3200 : 4800, DPR = low ? 1.25 : small ? 1.75 : 2;
 
   function hex(v) { v = (v || '').trim().replace('#', ''); if (v.length === 3) v = v.replace(/./g, '$&$&'); var n = parseInt(v, 16) || 0; return [(n >> 16 & 255) / 255, (n >> 8 & 255) / 255, (n & 255) / 255]; }
   function colors() {
