@@ -218,7 +218,6 @@ main,footer{position:relative;z-index:1}
   clip-path:polygon(0 100%,0.0% 85.5%,12.5% 85.5%,12.5% 78.6%,25.0% 78.6%,25.0% 69.6%,37.5% 69.6%,37.5% 58.6%,50.0% 58.6%,50.0% 46.1%,62.5% 46.1%,62.5% 32.1%,75.0% 32.1%,75.0% 16.7%,87.5% 16.7%,87.5% 0.0%,100.0% 0.0%,100% 100%);
 }
 html:not(.js) .pc-fallback,.pc-off .pc-fallback{opacity:.55}
-.actions{display:flex;flex-wrap:wrap;gap:.875rem;margin-top:2.5rem}
 .btn{
   display:inline-flex;align-items:center;gap:.6rem;justify-content:center;
   min-height:3.25rem;padding:.85rem 1.6rem;border-radius:999px;
@@ -416,22 +415,14 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
   .hero-inner{display:contents}
   .hero h1{line-height:1.05}
   .hero h1 .h1-b{font-size:.64em;margin-top:.45em}
-  .hero-art{display:block;order:2;flex:1 1 0;min-height:0;width:100%;margin-block:clamp(.5rem,2svh,1.25rem)}
-  .pc-fallback{inset:auto;left:50%;top:50%;width:min(100%,100cqh,20rem);aspect-ratio:1.15;transform:translate(-50%,-50%)}
+  .hero-art{display:block;order:2;flex:1 1 0;min-height:0;width:100%;margin-block:clamp(.75rem,3svh,1.75rem)}
+  .pc-fallback{inset:auto;left:50%;top:50%;width:min(100%,100cqh,22rem);aspect-ratio:1.15;transform:translate(-50%,-50%)}
   .hero-art{container-type:size}
-  .actions{order:3;margin-top:0;flex-direction:column;flex-wrap:nowrap;align-items:stretch;gap:.375rem}
-  .actions .btn-primary{width:100%;min-height:3.5rem;font-size:1.0625rem}
-  .actions .btn-disabled{
-    background:none;border:0;box-shadow:none;min-height:2.75rem;padding:0;
-    font-weight:500;font-size:1rem;color:var(--disabled-text);gap:.5rem;
-  }
 }
 @media (max-width:767.98px) and (max-height:500px){
   .hero{min-height:0;padding-top:calc(env(safe-area-inset-top,0px) + 2rem);padding-bottom:2.5rem}
   .hero-art{display:none}
   .hero h1{font-size:clamp(1.75rem,calc(100cqi / 9.7),2.75rem)}
-  .actions{flex-direction:row;align-items:center;margin-top:1.75rem;gap:1.25rem}
-  .actions .btn-primary{width:auto}
 }
 @media (max-height:500px) and (orientation:landscape){
   .hero{padding-top:calc(env(safe-area-inset-top,0px) + 2rem);padding-bottom:2.5rem}
@@ -515,12 +506,6 @@ footer{border-top:1px solid var(--border);padding-block:2.5rem;color:var(--muted
     <div class="container hero-grid">
       <div class="hero-inner">
         <h1 id="hero-titel"><span class="h1-a">IT als</span> <span class="h1-key">Wettbewerbsvorteil,</span> <span class="h1-b">nicht als Kostenstelle.</span></h1>
-        <div class="actions">
-          <a class="btn btn-primary" href="#angebot">Zum Angebot</a>
-          <!-- Kontakt: sobald die Adresse existiert, ersetzen durch:
-          <a class="btn btn-primary" href="mailto:ADRESSE">[Mail-Icon] Kontakt aufnehmen</a> -->
-          <span class="btn btn-disabled"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-uhr"/></svg>Kontakt in Kürze</span>
-        </div>
       </div>
       <div class="hero-art" aria-hidden="true"><div class="pc-fallback"></div></div>
     </div>
