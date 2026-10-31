@@ -123,14 +123,15 @@
     var lvl = 0, warm = 0, fs = 0, fn = 0;
     function ease(a, b, v) { v = Math.min(1, Math.max(0, (v - a) / (b - a))); return v * v * (3 - 2 * v); }
     function lerp(a, b, t) { return a + (b - a) * t; }
-    /* Morph 0..3 mit kurzen Plateaus – nur innerhalb der Hero-Scrollhöhe, kein Extra-Leerraum. */
+    /* Morph 0..3 früher fertig: Wachstum liegt etwa dort, wo zuvor die Säulen standen.
+       Kurze Plateaus, alles innerhalb der Hero-Höhe – kein Extra-Leerraum. */
     function morphAt(t) {
-      if (t < 0.06) return 0;
-      if (t < 0.22) return ease(0.06, 0.22, t);
-      if (t < 0.36) return 1;
-      if (t < 0.52) return 1 + ease(0.36, 0.52, t);
-      if (t < 0.64) return 2;
-      if (t < 0.92) return 2 + ease(0.64, 0.92, t);
+      if (t < 0.04) return 0;
+      if (t < 0.14) return ease(0.04, 0.14, t);
+      if (t < 0.22) return 1;
+      if (t < 0.34) return 1 + ease(0.22, 0.34, t);
+      if (t < 0.40) return 2;
+      if (t < 0.52) return 2 + ease(0.40, 0.52, t);
       return 3;
     }
     function sizeCanvas() {
@@ -147,8 +148,8 @@
       var ar = wide ? Math.min(W * 0.2, H * 0.36) : Math.min(W * 0.36, H * 0.3);
       // Wolke folgt dem Hero-Art-Slot und geht mit dem Hero; Ambient erst wenn Hero weg ist
       var mv = tiny ? 1 : ease(0.55, 1.05, p);
-      // Erzählspanne = Hero-Höhe (kein künstlich verlängerter Leer-Scroll)
-      var story = st.heroH * (wide ? 0.95 : 0.9);
+      // Erzählspanne ≈ Hero; Wachstum ist bei ~0,5× Hero-Höhe fertig (früher als zuvor)
+      var story = st.heroH * (wide ? 0.85 : 0.78);
       var t = Math.min(1, Math.max(0, sy / Math.max(1, story)));
       return {
         x: lerp(st.sx, ax, mv),
@@ -157,12 +158,12 @@
         m: morphAt(t)
       };
     }
-    // Deckkraft: im Hero voll, danach Ambient – an Hero gebunden, nicht an eine verlängerte Story
+    // Deckkraft: voll bis Wachstum gelandet ist, Ambient erst danach
     function alpha() {
       if (st.reduce) return 1;
       if (st.sr < 45) return st.amb;
       var wide = st.W >= 1000;
-      return 1 + (st.amb - 1) * ease(wide ? 0.55 : 0.4, wide ? 1.1 : 0.85, Math.max(st.sy, cur.sy) / Math.max(1, st.heroH));
+      return 1 + (st.amb - 1) * ease(wide ? 0.75 : 0.65, wide ? 1.15 : 1.05, Math.max(st.sy, cur.sy) / Math.max(1, st.heroH));
     }
     function draw() {
       var ax = 0.34 + cur.ty * 0.1, ay = -0.36 + 0.12 * Math.sin(time * 0.09) + cur.tx * 0.2;
@@ -200,7 +201,7 @@
         dt = acc;
       } else quality(dt);
       acc = 0;
-      var ks = 1 - Math.exp(-dt * 7.5), k = 1 - Math.exp(-dt * 3.6), kt = 1 - Math.exp(-dt * 2);
+      var ks = 1 - Math.exp(-dt * 7.5), k = 1 - Math.exp(-dt * 5.2), kt = 1 - Math.exp(-dt * 2);
       var dsy = st.sy - cur.sy;
       cur.sy = Math.abs(dsy) < 0.05 ? st.sy : cur.sy + dsy * ks;
       var g = targets(cur.sy);
