@@ -143,9 +143,10 @@
       var W = st.W, H = st.H, p = Math.min(1, sy / Math.max(1, st.heroH));
       if (st.reduce) return { x: W / 2, y: H / 2, r: Math.min(W, H) * 0.42, m: 3 };
       var wide = W >= 1000, tiny = st.sr < 45;
-      var ax = wide ? W * 0.7 : W * 0.5, ay = H * 0.5;
-      // Mobil: Slot möglichst ausfüllen – weniger Weißraum über/unter der Wolke
-      var ar = wide ? Math.min(W * 0.2, H * 0.36) : Math.min(W * 0.44, H * 0.38);
+      // Mobil leicht links der Mitte: Wachstumspfeil rechts braucht Rand
+      var ax = wide ? W * 0.7 : W * 0.48, ay = H * 0.5;
+      // Mobil: kleinerer Radius – gesamte Morph inkl. Pfeilspitze im Viewport
+      var ar = wide ? Math.min(W * 0.2, H * 0.36) : Math.min(W * 0.32, H * 0.3);
       // Wolke folgt dem Hero-Art-Slot; Ambient erst wenn Hero weg ist
       var mv = tiny ? 1 : ease(0.55, 1.05, p);
       // Kurze Erzählspanne: Wachstum inkl. Pfeil schon bei ~0,25–0,35× Hero
@@ -268,7 +269,7 @@
     if (reduce) { W = r.width; H = r.height; } else { W = cv.clientWidth || w.innerWidth; H = cv.clientHeight || w.innerHeight; }
     return {
       W: W, H: H, dpr: Math.min(w.devicePixelRatio || 1, DPR), sy: sy,
-      sx: r.left + r.width / 2, sY: r.top + sy + r.height / 2, sr: Math.min(r.width, r.height) * (small ? 0.52 : 0.46),
+      sx: r.left + r.width / 2, sY: r.top + sy + r.height / 2, sr: Math.min(r.width, r.height) * (small ? 0.4 : 0.44),
       heroH: hero.offsetHeight || 1, docMax: Math.max(1, root.scrollHeight - (reduce ? w.innerHeight : H))
     };
   }
