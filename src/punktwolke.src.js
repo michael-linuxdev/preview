@@ -1,5 +1,6 @@
 /* Punktwolke – erzählt den Weg vom gewachsenen Ist-Zustand zur geordneten, wachsenden IT.
    Zustände: 0 verstreutes Punktfeld · 1 sauberes Raster (Fundament) · 2 erste Säulen · 3 ansteigende Säulen + Wachstumskurve.
+   Scroll: längere Plateaus je Zustand, damit die Botschaft lesbar bleibt; Morph erst danach.
    WebGL 1 ohne Abhängigkeiten. Alle Übergänge laufen im Vertex-Shader; pro Frame werden nur Uniforms gesetzt.
    Gerendert wird nach Möglichkeit in einem Worker (OffscreenCanvas), damit der Hauptthread frei bleibt. */
 (function () {
@@ -8,7 +9,21 @@
   /* ===== Render-Engine: läuft im Worker oder – als Rückfall – im Hauptthread ===== */
   function engine(canvas, post, raf, caf) {
     var gl = null;
-    try { gl = canvas.getContext('webgl', { alpha: true, antialias: false, depth: false, stencil: false, premultipliedAlpha: true, preserveDrawingBuffer: false, powerPreference: 'low-power' }); } catch (e) { gl = null; }
+    try {
+      gl = canvas.getContext('webgl', {
+        alpha: true, antialias: false, depth: false, stencil: false,
+        premultipliedAlpha: true, preserveDrawingBuffer: false,
+        powerPreference: 'low-power', desynchronized: true, failIfMajorPerformanceCaveat: false
+      });
+    } catch (e) { gl = null; }
+    if (!gl) {
+      try {
+        gl = canvas.getContext('webgl', {
+          alpha: true, antialias: false, depth: false, stencil: false,
+          premultipliedAlpha: true, preserveDrawingBuffer: false, powerPreference: 'low-power'
+        });
+      } catch (e2) { gl = null; }
+    }
     if (!gl) { post({ t: 'fail' }); return null; }
 
     var st = { amb: 0.17, sy: 0, W: 1, H: 1, dpr: 1, sx: 0, sY: 0, sr: 0, heroH: 1, docMax: 1, px: 0, py: 0, hv: true, reduce: false, run: false };
@@ -71,15 +86,17 @@
       return [A0, A1, A2, A3, S];
     }
 
+    // Morph-Ease ohne Stagger-Rauschen in den Plateaus: nur während echter Übergänge gestaffelt
     var VS = 'attribute vec3 a0,a1,a2;attribute vec4 a3;attribute vec2 aS;' +
       'uniform float uM,uT,uR,uD,uPt,uA;uniform vec2 uC,uV;uniform mat3 uRot;uniform vec3 uFront,uBack;' +
       'varying vec3 vCol;varying float vA;' +
-      'void main(){float n=floor(min(uM,2.999)),f=uM-n;f=clamp(f*1.5-aS.x*.5,0.,1.);f=f*f*(3.-2.*f);' +
+      'void main(){float n=floor(min(uM,2.999)),f=uM-n;' +
+      'float edge=smoothstep(0.04,0.96,f);f=mix(f,clamp(f*1.35-aS.x*.35,0.,1.),edge);f=f*f*(3.-2.*f);' +
       'vec3 q=a3.xyz;float fa=1.;' +
-      'if(a3.w>0.){float e=fract((q.y+.85)/a3.w+uT*.05/a3.w);q.y=-.85+e*a3.w;fa=smoothstep(0.,.12,e)*smoothstep(1.,.75,e);}' +
+      'if(a3.w>0.){float e=fract((q.y+.85)/a3.w+uT*.04/a3.w);q.y=-.85+e*a3.w;fa=smoothstep(0.,.12,e)*smoothstep(1.,.75,e);}' +
       'vec3 p=n<.5?mix(a0,a1,f):n<1.5?mix(a1,a2,f):mix(a2,q,f);' +
       'float dis=clamp(1.-uM,0.,1.),ph=aS.x*40.+aS.y*17.;' +
-      'p+=(.006+.07*dis)*vec3(sin(uT*.21+ph),sin(uT*.17+ph*1.3),cos(uT*.19+ph*.7));' +
+      'p+=(.004+.045*dis)*vec3(sin(uT*.18+ph),sin(uT*.14+ph*1.3),cos(uT*.16+ph*.7));' +
       'p=uRot*p;float s=uD/(uD-p.z);vec2 px=uC+vec2(p.x,-p.y)*uR*s;' +
       'gl_Position=vec4(px.x/uV.x*2.-1.,1.-px.y/uV.y*2.,0.,1.);' +
       'float df=clamp((p.z+1.2)/2.4,0.,1.);gl_PointSize=uPt*s*(.75+.5*aS.y);' +
@@ -105,34 +122,51 @@
     }
 
     var cur = { sy: 0, m: 0, x: 0, y: 0, r: 0, tx: 0, ty: 0, o: 1 }, first = true, last = 0, time = 0, handle = 0, acc = 0, still = 0;
-    var lvl = 0, warm = 0, fs = 0, fn = 0;
+    var lvl = 0, warm = 0, fs = 0, fn = 0, scrollBoost = 0;
     function ease(a, b, v) { v = Math.min(1, Math.max(0, (v - a) / (b - a))); return v * v * (3 - 2 * v); }
     function lerp(a, b, t) { return a + (b - a) * t; }
+    /* Scrollfortschritt 0..3 mit Plateaus: Chaos · Raster · Säulen · Wachstum.
+       Jeder Zustand bleibt sichtbar, Morph nur dazwischen – Botschaft Chaos→Ordnung→Aufbau→Wachstum. */
+    function morphAt(t) {
+      if (t < 0.10) return 0;
+      if (t < 0.28) return ease(0.10, 0.28, t);
+      if (t < 0.42) return 1;
+      if (t < 0.58) return 1 + ease(0.42, 0.58, t);
+      if (t < 0.70) return 2;
+      if (t < 0.92) return 2 + ease(0.70, 0.92, t);
+      return 3;
+    }
     function sizeCanvas() {
       var bw = Math.max(1, Math.round(st.W * st.dpr)), bh = Math.max(1, Math.round(st.H * st.dpr));
       if (canvas.width !== bw || canvas.height !== bh) { canvas.width = bw; canvas.height = bh; }
-      gl.viewport(0, 0, bw, bh); gl.uniform2f(U.uV, bw, bh); gl.uniform1f(U.uPt, (st.W < 600 ? 2.7 : 3.2) * st.dpr);
+      gl.viewport(0, 0, bw, bh); gl.uniform2f(U.uV, bw, bh); gl.uniform1f(U.uPt, (st.W < 600 ? 2.9 : 3.4) * st.dpr);
     }
     // Ziele hängen am geglätteten Scrollwert (cur.sy): stetige Bewegung, egal wie unregelmäßig Scroll-Events kommen
     function targets(sy) {
-      var W = st.W, H = st.H, p = Math.min(1, sy / st.heroH);
+      var W = st.W, H = st.H, p = Math.min(1, sy / Math.max(1, st.heroH));
       if (st.reduce) return { x: W / 2, y: H / 2, r: Math.min(W, H) * 0.42, m: 3 };
       var wide = W >= 1000, tiny = st.sr < 45;
-      var ax = wide ? W * 0.7 : W * 0.48, ay = H * 0.5, ar = wide ? Math.min(W * 0.2, H * 0.36) : Math.min(W * 0.34, H * 0.27);
-      // schmal: Wolke klebt am Platz zwischen Slogan und Buttons (keine Überlagerung von Text) und ordnet sich früher
-      var mv = tiny ? 1 : ease(0.5, 1, p), hh = st.heroH * (wide ? 1 : 0.7), e3 = Math.min(st.docMax * 0.9, hh * 0.45);
+      var ax = wide ? W * 0.7 : W * 0.5, ay = H * (wide ? 0.48 : 0.52);
+      var ar = wide ? Math.min(W * 0.2, H * 0.36) : Math.min(W * 0.38, H * 0.32);
+      // Wolke bleibt lange im Hero-Slot, wandert erst spät in die Ambient-Lage
+      var mv = tiny ? 1 : ease(0.55, 1.15, p);
+      // Erzählspanne: ~1,55× Hero (Desktop) bzw. ~1,9× Viewport-Höhe – länger sichtbar und lesbar
+      var story = wide
+        ? Math.max(st.heroH * 1.55, Math.min(st.docMax * 0.72, st.heroH + H * 0.85))
+        : Math.max(st.heroH * 1.35, Math.min(st.docMax * 0.8, H * 1.9));
+      var t = Math.min(1, Math.max(0, sy / Math.max(1, story)));
       return {
-        x: lerp(st.sx, ax, mv), y: lerp(st.sY - sy * (wide ? 0.5 : 1), ay, mv), r: lerp(tiny ? ar : st.sr, ar, mv),
-        // Erzählung, solange der Hero sichtbar ist: Chaos -> Raster (15 % Hero) -> Säulen (30 %) -> Wachstum (45 %)
-        m: Math.min(1, sy / (hh * 0.15)) + Math.min(1, Math.max(0, (sy - hh * 0.15) / (hh * 0.15))) + Math.min(1, Math.max(0, (sy - hh * 0.3) / Math.max(1, e3 - hh * 0.3)))
+        x: lerp(st.sx, ax, mv), y: lerp(st.sY - sy * (wide ? 0.45 : 0.85), ay, mv),
+        r: lerp(tiny ? ar : st.sr * 1.05, ar, mv),
+        m: morphAt(t)
       };
     }
-    // Deckkraft: im Hero voll, danach gedämpft (sichert AA-Kontrast); es zählt der weiter gescrollte Wert
+    // Deckkraft: im Hero voll, danach gedämpft; Ausblendung später, damit Wachstum sichtbar bleibt
     function alpha() {
       if (st.reduce) return 1;
       if (st.sr < 45) return st.amb;
       var wide = st.W >= 1000;
-      return 1 + (st.amb - 1) * ease(wide ? 0.5 : 0.35, wide ? 1.05 : 0.75, Math.max(st.sy, cur.sy) / st.heroH);
+      return 1 + (st.amb - 1) * ease(wide ? 0.85 : 0.7, wide ? 1.45 : 1.25, Math.max(st.sy, cur.sy) / st.heroH);
     }
     function draw() {
       var ax = 0.34 + cur.ty * 0.1, ay = -0.36 + 0.12 * Math.sin(time * 0.09) + cur.tx * 0.2;
@@ -144,44 +178,60 @@
       if (cur.o > 0.003) gl.drawArrays(gl.POINTS, 0, nDraw);
       if (first) { first = false; post({ t: 'ready' }); }
     }
-    // adaptive Qualität: liegt die Frame-Zeit im Mittel über 18 ms, erst Punkte, dann Auflösung reduzieren
+    // adaptive Qualität: früher und strenger – erst Punkte, dann Auflösung
     function quality(dt) {
-      if (++warm < 40) return;
+      if (++warm < 28) return;
       fs += dt; fn++;
-      if (fn < 45) return;
+      if (fn < 36) return;
       var avg = fs / fn; fs = fn = 0;
-      if (avg > 0.018 && lvl < 3) {
+      if (avg > 0.017 && lvl < 4) {
         lvl++;
-        if (lvl < 3) nDraw = Math.round(N * (lvl === 1 ? 0.7 : 0.5));
-        else if (st.dpr > 1) { st.dpr = Math.max(1, st.dpr * 0.7); sizeCanvas(); }
-        warm = 20; post({ t: 'q', l: lvl, n: nDraw, dpr: st.dpr });
+        if (lvl === 1) nDraw = Math.round(N * 0.72);
+        else if (lvl === 2) nDraw = Math.round(N * 0.5);
+        else if (lvl === 3) nDraw = Math.round(N * 0.36);
+        else if (st.dpr > 1) { st.dpr = 1; sizeCanvas(); }
+        warm = 16; post({ t: 'q', l: lvl, n: nDraw, dpr: st.dpr });
+      }
+    }
+    function baseDraw() {
+      return lvl === 0 ? N : Math.round(N * (lvl === 1 ? 0.72 : lvl === 2 ? 0.5 : 0.36));
+    }
+    function applyScrollLod(active) {
+      if (active) {
+        scrollBoost = 1;
+        nDraw = Math.max(480, Math.round(baseDraw() * 0.62));
+      } else if (scrollBoost > 0) {
+        scrollBoost = 0;
+        nDraw = baseDraw();
       }
     }
     function frame(now) {
       handle = 0;
       var dt = last ? Math.min(0.1, (now - last) / 1000) : 0.016;
       last = now;
-      // Ruhe: nichts ändert sich sichtbar -> im Hero 30 fps, als Hintergrund 15 fps, nach 6 s Pause bis zur nächsten Eingabe
-      var idle = still > 0.25;
+      // Ruhe: nichts ändert sich sichtbar -> im Hero ~24 fps, als Hintergrund 12 fps, nach 5 s Pause
+      var idle = still > 0.22;
       if (idle) {
-        if (!st.hv && still > 6) { draw(); return; }
-        acc += dt; if (acc < (st.hv ? 0.03 : 0.064)) { schedule(); return; }
+        if (!st.hv && still > 5) { draw(); return; }
+        acc += dt; if (acc < (st.hv ? 0.04 : 0.08)) { schedule(); return; }
         dt = acc;
       } else quality(dt);
       acc = 0;
-      var ks = 1 - Math.exp(-dt * 7.5), k = 1 - Math.exp(-dt * 4), kt = 1 - Math.exp(-dt * 2);
+      var ks = 1 - Math.exp(-dt * 8.5), k = 1 - Math.exp(-dt * 3.2), kt = 1 - Math.exp(-dt * 2);
       var dsy = st.sy - cur.sy;
       cur.sy = Math.abs(dsy) < 0.05 ? st.sy : cur.sy + dsy * ks;
       var g = targets(cur.sy);
       // sichtbare Änderung? Hinter dem Hero ändert Scrollen am fertigen Bild nichts mehr -> Ruhetakt statt 60 fps
-      var dv = Math.abs(g.x - cur.x) + Math.abs(g.y - cur.y) + Math.abs(g.r - cur.r) + Math.abs(g.m - cur.m) * 400;
+      var dv = Math.abs(g.x - cur.x) + Math.abs(g.y - cur.y) + Math.abs(g.r - cur.r) + Math.abs(g.m - cur.m) * 480;
       cur.m += (g.m - cur.m) * k; cur.x = g.x; cur.y = g.y; cur.r = g.r;
       var dp = Math.abs(st.px - cur.tx) + Math.abs(st.py - cur.ty);
       cur.tx += (st.px - cur.tx) * kt; cur.ty += (st.py - cur.ty) * kt;
       var o = alpha(); dv += Math.abs(o - cur.o) * 400; cur.o = o;
-      // im Erzählbereich (Hero bis Ende der Ordnung) zählt jede Scrollbewegung, auch eine ganz langsame
-      var act = Math.min(cur.sy, st.sy) < st.heroH * 1.1 && Math.abs(dsy) > 0.02;
-      still = (act || dv > 0.3 || dp > 0.01) ? 0 : still + dt;
+      // Erzählbereich: Story-Spanne + Hero – jede Scrollbewegung zählt
+      var storyEnd = Math.max(st.heroH * 1.6, st.H * 2);
+      var act = Math.min(cur.sy, st.sy) < storyEnd && Math.abs(dsy) > 0.015;
+      applyScrollLod(act && Math.abs(dsy) > 2.5);
+      still = (act || dv > 0.25 || dp > 0.01) ? 0 : still + dt;
       time += dt;
       draw(); schedule();
     }
@@ -191,7 +241,7 @@
     return function (msg) {
       var wasRun = st.run;
       for (var key in msg) if (key !== 'n' && key !== 'front' && key !== 'back') st[key] = msg[key];
-      if (!ready) { if (!setup(msg.n || 2000)) return; ready = true; }
+      if (!ready) { if (!setup(msg.n || 1600)) return; ready = true; }
       if (msg.W) sizeCanvas();
       if (msg.front) { gl.uniform3fv(U.uFront, msg.front); gl.uniform3fv(U.uBack, msg.back); }
       if (first) snap();
@@ -212,11 +262,11 @@
   if (!slot || !hero) return;
   var mqReduce = w.matchMedia('(prefers-reduced-motion: reduce)'), mqDark = w.matchMedia('(prefers-color-scheme: dark)'), mqFine = w.matchMedia('(hover: hover) and (pointer: fine)');
   var reduce = mqReduce.matches, send = null, cv = null, worker = null, lastW = -1, lastH = -1;
-  // Geräteklasse: Bildschirmgröße, Kerne, Arbeitsspeicher (wo verfügbar)
+  // Geräteklasse: Bildschirmgröße, Kerne, Arbeitsspeicher (wo verfügbar) – bewusst sparsam
   var small = Math.min(w.screen.width || w.innerWidth, w.screen.height || w.innerHeight) < 600;
   var cores = nav.hardwareConcurrency || 4, mem = nav.deviceMemory;
-  var low = mem !== undefined && (mem <= 2 || (mem <= 4 && cores <= 4));
-  var NPTS = low ? 1300 : small ? 1900 : 3400, DPR = low ? 1.25 : small ? 1.5 : 2;
+  var low = (mem !== undefined && (mem <= 2 || (mem <= 4 && cores <= 4))) || cores <= 2;
+  var NPTS = low ? 900 : small ? 1400 : 2200, DPR = low ? 1 : small ? 1.25 : 1.5;
 
   function hex(v) { v = (v || '').trim().replace('#', ''); if (v.length === 3) v = v.replace(/./g, '$&$&'); var n = parseInt(v, 16) || 0; return [(n >> 16 & 255) / 255, (n >> 8 & 255) / 255, (n & 255) / 255]; }
   function colors() {
@@ -228,7 +278,7 @@
     if (reduce) { W = r.width; H = r.height; } else { W = cv.clientWidth || w.innerWidth; H = cv.clientHeight || w.innerHeight; }
     return {
       W: W, H: H, dpr: Math.min(w.devicePixelRatio || 1, DPR), sy: sy,
-      sx: r.left + r.width / 2, sY: r.top + sy + r.height / 2, sr: Math.min(r.width, r.height) * 0.44,
+      sx: r.left + r.width / 2, sY: r.top + sy + r.height / 2, sr: Math.min(r.width, r.height) * 0.48,
       heroH: hero.offsetHeight || 1, docMax: Math.max(1, root.scrollHeight - (reduce ? w.innerHeight : H))
     };
   }
